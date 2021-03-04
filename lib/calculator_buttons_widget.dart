@@ -1,37 +1,39 @@
+import 'dart:developer';
+
 import 'package:calcunice/calculator_button.dart';
 import 'package:calcunice/calculator_button_widget.dart';
+import 'package:calcunice/keyboard_layout_calculation.dart';
 import 'package:flutter/material.dart';
 
 class CalculatorButtonsWidget extends StatelessWidget {
   const CalculatorButtonsWidget({Key key}) : super(key: key);
 
-  final buttonsPerRow = 4;
-  final amountOfRows = 7;
-  final double buttonWidth = 82;
-  final double buttonHeight = 66;
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final paddingWidth =
-            (constraints.maxWidth - (buttonWidth * buttonsPerRow)) /
-                (buttonsPerRow - 1);
-        final paddingHeight =
-            (constraints.maxHeight - (buttonHeight * amountOfRows)) /
-                (amountOfRows - 1);
+        var keyboardLayout = KeyboardLayoutCalculation(
+            constraints.maxWidth, constraints.maxHeight);
+        log(keyboardLayout.toString());
+
         return Stack(
           children: [
-            for (int i = 0; i < amountOfRows; i++)
-              for (int j = 0; j < buttonsPerRow; j++)
+            for (int i = 0; i < KeyboardLayoutCalculation.TOTAL_ROWS; i++)
+              for (int j = 0; j < KeyboardLayoutCalculation.BUTTONS_IN_ROW; j++)
                 Positioned(
-                  child: CalculatorButtonWidget(CalculatorButton(
-                      color: Colors.pink,
-                      icon: Icon(Icons.usb_rounded),
-                      height: buttonHeight,
-                      width: buttonWidth)),
-                  top: (buttonHeight + paddingHeight) * i,
-                  left: (buttonWidth + paddingWidth) * j,
+                  child: CalculatorButtonWidget(
+                    CalculatorButton(
+                        color: Colors.red,
+                        icon: Icon(Icons.add),
+                        height: keyboardLayout.heightSize,
+                        width: keyboardLayout.widthSize),
+                  ),
+                  top: (keyboardLayout.heightSize +
+                          keyboardLayout.heightMargin) *
+                      i,
+                  left:
+                      (keyboardLayout.widthSize + keyboardLayout.widthMargin) *
+                          j,
                 )
           ],
         );

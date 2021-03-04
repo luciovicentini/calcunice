@@ -21,7 +21,10 @@ class CalculatorView extends StatelessWidget {
         ),
         Flexible(
           flex: 28,
-          child: CalculatorButtonsWidget(),
+          child: Container(
+            child: CalculatorButtonsWidget(),
+            color: Colors.cyan,
+          ),
         ),
       ],
     );
