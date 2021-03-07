@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-class KeyboardLayoutCalculation {
+class KeyboardLayoutCalculator {
   static const double ORIGINAL_BUTTON_WIDTH = 820;
   static const double ORIGINAL_BUTTON_HEIGHT = 660;
   static const double MIN_MARGIN = 8;
@@ -16,17 +16,19 @@ class KeyboardLayoutCalculation {
 
   bool _recalculate = false;
 
-  KeyboardLayoutCalculation(double maxWidth, double maxHeight) {
+  KeyboardLayoutCalculator.calculateFromContainerSize(
+      double maxWidth, double maxHeight) {
     _calculate(maxWidth, maxHeight);
   }
 
   _calculate(double maxWidth, double maxHeight) {
-    log("container width = $maxWidth - container height = $maxHeight");
-
     do {
       _calculateWidth(maxWidth);
       _calculateHeight(maxHeight);
     } while (_recalculate);
+    log(this.toString());
+    log("total needed: ${_calculateTotalNeeded(this.widthMargin, this.widthSize, BUTTONS_IN_ROW)} - max width $maxWidth");
+    log("total needed: ${_calculateTotalNeeded(this.heightMargin, this.heightSize, TOTAL_ROWS)} - max height $maxHeight");
   }
 
   _calculateWidth(double maxWidth) {
@@ -53,8 +55,8 @@ class KeyboardLayoutCalculation {
     heightSize = _calculateHeightSizeProp();
     heightMargin = _calculateMargin(maxHeight, heightSize, TOTAL_ROWS);
 
-
-    while (_calculateTotalNeeded(heightMargin, heightSize, TOTAL_ROWS) > maxHeight) {
+    while (_calculateTotalNeeded(heightMargin, heightSize, TOTAL_ROWS) >
+        maxHeight) {
       if (heightMargin > MIN_MARGIN) {
         heightMargin -= 4;
       } else {
@@ -92,5 +94,21 @@ class KeyboardLayoutCalculation {
         ' heightSize: $heightSize, heightMargin: $heightMargin, \n'
         ' totalWidth: ${_calculateTotalNeeded(widthMargin, widthSize, BUTTONS_IN_ROW)},'
         ' totalHeight: ${_calculateTotalNeeded(heightMargin, heightSize, TOTAL_ROWS)}';
+  }
+
+  double calculateHeight(int stepsY) {
+    if (stepsY == 0) return 0;
+    // log ("stepY = $stepsY");
+    double height = (this.heightSize * stepsY) + (this.heightMargin * (stepsY - 1));
+    log ("height = $height");
+    return height;
+  }
+
+  double calculateWidth(int stepsX) {
+    if (stepsX == 0) return 0;
+    // log ("stepX = $stepsX");
+    final width = (this.widthSize * stepsX) + (this.widthMargin * (stepsX - 1));
+    log("width = $width");
+    return width;
   }
 }
