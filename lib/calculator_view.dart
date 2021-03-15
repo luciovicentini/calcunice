@@ -1,4 +1,4 @@
-import 'calculator_buttons_widget.dart';
+import 'keyboard_layout_widget.dart';
 import 'package:calcunice/calculator_screen_widget.dart';
 import 'package:calcunice/dark_light_switch_widget.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class CalculatorView extends StatelessWidget {
         Flexible(
           flex: 28,
           child: Container(
-            child: CalculatorButtonsWidget(),
+            child: KeyboardLayoutWidget(),
           ),
         ),
       ],

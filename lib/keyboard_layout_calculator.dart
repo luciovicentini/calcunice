@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 class KeyboardLayoutCalculator {
   static const double ORIGINAL_BUTTON_WIDTH = 820;
   static const double ORIGINAL_BUTTON_HEIGHT = 660;
@@ -26,9 +24,6 @@ class KeyboardLayoutCalculator {
       _calculateWidth(maxWidth);
       _calculateHeight(maxHeight);
     } while (_recalculate);
-    log(this.toString());
-    log("total needed: ${_calculateTotalNeeded(this.widthMargin, this.widthSize, BUTTONS_IN_ROW)} - max width $maxWidth");
-    log("total needed: ${_calculateTotalNeeded(this.heightMargin, this.heightSize, TOTAL_ROWS)} - max height $maxHeight");
   }
 
   _calculateWidth(double maxWidth) {
@@ -98,17 +93,14 @@ class KeyboardLayoutCalculator {
 
   double calculateHeight(int stepsY) {
     if (stepsY == 0) return 0;
-    // log ("stepY = $stepsY");
-    double height = (this.heightSize * stepsY) + (this.heightMargin * (stepsY - 1));
-    log ("height = $height");
+    double height =
+        (this.heightSize * stepsY) + (this.heightMargin * (stepsY - 1));
     return height;
   }
 
   double calculateWidth(int stepsX) {
     if (stepsX == 0) return 0;
-    // log ("stepX = $stepsX");
     final width = (this.widthSize * stepsX) + (this.widthMargin * (stepsX - 1));
-    log("width = $width");
     return width;
   }
 }

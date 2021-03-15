@@ -26,10 +26,8 @@ class CalculatorButtonWidget extends StatelessWidget {
         child: Container(
           height: buttonHeight,
           width: buttonWidth,
-          child: Icon(
-            calculatorButton.icon,
-            color: calculatorButton.iconColor,
-          ),
+          child: _getButtonChild(
+              calculatorButton.icon, calculatorButton.iconColor, context),
           decoration: BoxDecoration(
             color: calculatorButton.backgroundColor,
             borderRadius: BorderRadius.circular(26.0),
@@ -41,5 +39,33 @@ class CalculatorButtonWidget extends StatelessWidget {
       left: (keyboardLayout.widthSize + keyboardLayout.widthMargin) *
           calculatorButton.positionX,
     );
+  }
+
+  Widget _getButtonChild(Object icon, Color iconColor, BuildContext context) {
+    log('Icon is ${icon.runtimeType} - Icon is String: ${icon is String}');
+    if (icon is IconData) {
+      return Icon(
+        icon,
+        color: iconColor,
+      );
+    } else if (icon is String) {
+      return Center(
+        child: Text(
+          icon,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: iconColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 30.0,
+          ),
+          // style: TextStyle(
+          //   color: iconColor,
+          //
+          // ),
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }
