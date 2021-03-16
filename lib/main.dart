@@ -7,8 +7,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final backgroundColorStart = Colors.white;
-  final backgroundColorEnd = Color.fromARGB(255, 210, 210, 210);
+  // final backgroundColorStart = Colors.white;
+  // final backgroundColorEnd = /* Color.fromARGB(255, 210, 210, 210) */ ;
 
   @override
   Widget build(BuildContext context) {
@@ -16,17 +16,16 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
-        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [backgroundColorStart, backgroundColorEnd],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.0, 1.0],
+              colors: [Colors.white, Colors.grey[300]],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: [0.4, 1.0],
             ),
           ),
           child: SafeArea(

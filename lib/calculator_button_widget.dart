@@ -19,18 +19,23 @@ class CalculatorButtonWidget extends StatelessWidget {
         keyboardLayout.calculateHeight(calculatorButton.stepsY);
     final buttonWidth = keyboardLayout.calculateWidth(calculatorButton.stepsX);
     return Positioned(
-      child: InkWell(
-        onTap: () {
-          print(calculatorButton);
-        },
-        child: Container(
-          height: buttonHeight,
-          width: buttonWidth,
-          child: _getButtonChild(
-              calculatorButton.icon, calculatorButton.iconColor, context),
-          decoration: BoxDecoration(
-            color: calculatorButton.backgroundColor,
-            borderRadius: BorderRadius.circular(26.0),
+      child: PhysicalModel(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(26.0),
+        elevation: 8,
+        child: InkWell(
+          onTap: () {
+            print(calculatorButton);
+          },
+          child: Container(
+            height: buttonHeight,
+            width: buttonWidth,
+            child: _getButtonChild(
+                calculatorButton.icon, calculatorButton.iconColor, context),
+            decoration: BoxDecoration(
+              color: calculatorButton.backgroundColor,
+              borderRadius: BorderRadius.circular(26.0),
+            ),
           ),
         ),
       ),
@@ -58,10 +63,6 @@ class CalculatorButtonWidget extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 30.0,
           ),
-          // style: TextStyle(
-          //   color: iconColor,
-          //
-          // ),
         ),
       );
     } else {
