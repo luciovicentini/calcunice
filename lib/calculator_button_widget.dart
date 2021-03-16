@@ -22,7 +22,7 @@ class CalculatorButtonWidget extends StatelessWidget {
       child: PhysicalModel(
         color: Colors.black,
         borderRadius: BorderRadius.circular(26.0),
-        elevation: 8,
+        elevation: 4,
         child: InkWell(
           onTap: () {
             print(calculatorButton);

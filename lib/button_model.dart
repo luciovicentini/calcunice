@@ -36,15 +36,15 @@ class ButtonModel {
   }
 
   ButtonModel.deleteAll(String position) {
-    icon = Icons.arrow_upward_rounded;
-    backgroundColor = Colors.grey;
     _setPositionFromString(position);
+    icon = Icons.arrow_upward_rounded;
+    backgroundColor = kLightArrowUpButtonBackground;
   }
 
   ButtonModel.delete(String position) {
     _setPositionFromString(position);
     icon = 'C';
-    backgroundColor = Colors.purpleAccent;
+    backgroundColor = kLightClearButtonBackground;
   }
 
   ButtonModel.equals(String position) {
@@ -53,66 +53,66 @@ class ButtonModel {
     stepsY = 2;
     icon = '=';
     iconColor = Colors.white;
-    backgroundColor = Colors.orange;
+    backgroundColor = kBasicOperationBackgroundColor;
   }
 
   ButtonModel.add(String position) {
     _setPositionFromString(position);
     icon = '+';
-    backgroundColor = kBasicOperationBackgroundColor;
+    backgroundColor = kBasicOperationBackgroundLightColor;
   }
 
   ButtonModel.subtract(String position) {
     _setPositionFromString(position);
     icon = '-';
-    backgroundColor = kBasicOperationBackgroundColor;
+    backgroundColor = kBasicOperationBackgroundLightColor;
   }
 
   ButtonModel.multiply(String position) {
     _setPositionFromString(position);
     icon = 'x';
-    backgroundColor = kBasicOperationBackgroundColor;
+    backgroundColor = kBasicOperationBackgroundLightColor;
   }
 
   ButtonModel.division(String position) {
     _setPositionFromString(position);
     icon = '/';
-    backgroundColor = kBasicOperationBackgroundColor;
+    backgroundColor = kBasicOperationBackgroundLightColor;
   }
 
   ButtonModel.openParenthesis(String position) {
     _setPositionFromString(position);
     icon = '(';
     iconColor = Colors.white;
-    backgroundColor = Colors.purple[900];
+    backgroundColor = kLightPurpleBackbround;
   }
 
   ButtonModel.closeParenthesis(String position) {
     _setPositionFromString(position);
     icon = ')';
     iconColor = Colors.white;
-    backgroundColor = Colors.purple[900];
+    backgroundColor = kLightPurpleBackbround;
   }
 
   ButtonModel.squareRoot(String position) {
     _setPositionFromString(position);
     icon = '\u221a';
     iconColor = Colors.white;
-    backgroundColor = Colors.purple[900];
+    backgroundColor = kLightPurpleBackbround;
   }
 
   ButtonModel.percentage(String position) {
     _setPositionFromString(position);
     icon = '%';
     iconColor = Colors.white;
-    backgroundColor = Colors.purple[900];
+    backgroundColor = kLightPurpleBackbround;
   }
 
   ButtonModel.plusMinus(String position) {
     _setPositionFromString(position);
     icon = '+-';
     iconColor = Colors.white;
-    backgroundColor = Colors.purple[900];
+    backgroundColor = kLightPurpleBackbround;
   }
 
   ButtonModel.zero(String position) {

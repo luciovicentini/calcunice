@@ -7,20 +7,20 @@ class CalculatorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Flexible(
           child: DarkLightSwitchWidget(),
           flex: 2,
         ),
+        /* SizedBox(height: 4.0), */
         Flexible(
           child: CalculatorScreenWidget(),
-          flex: 8,
+          flex: 9,
         ),
-        SizedBox(
-          height: 8.0,
-        ),
+        SizedBox(height: 8.0),
         Flexible(
-          flex: 28,
+          flex: 25,
           child: Container(
             child: KeyboardLayoutWidget(),
           ),
