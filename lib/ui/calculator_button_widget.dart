@@ -1,9 +1,7 @@
-import 'dart:developer';
-
-import 'package:calcunice/keyboard_layout_calculator.dart';
 import 'package:flutter/material.dart';
 
-import 'button_model.dart';
+import '../models/keyboard_layout_calculator.dart';
+import '../models/button_model.dart';
 
 class CalculatorButtonWidget extends StatelessWidget {
   CalculatorButtonWidget(this.calculatorButton, this.keyboardLayout, {Key key})
@@ -14,7 +12,6 @@ class CalculatorButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log(calculatorButton.toString());
     final buttonHeight =
         keyboardLayout.calculateHeight(calculatorButton.stepsY);
     final buttonWidth = keyboardLayout.calculateWidth(calculatorButton.stepsX);
@@ -47,7 +44,6 @@ class CalculatorButtonWidget extends StatelessWidget {
   }
 
   Widget _getButtonChild(Object icon, Color iconColor, BuildContext context) {
-    log('Icon is ${icon.runtimeType} - Icon is String: ${icon is String}');
     if (icon is IconData) {
       return Icon(
         icon,

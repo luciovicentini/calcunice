@@ -1,4 +1,4 @@
-import 'package:calcunice/calculator_view.dart';
+import 'package:calcunice/ui/calculator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,16 +22,16 @@ class MyApp extends StatelessWidget {
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.white, Colors.grey[300]],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              stops: [0.4, 1.0],
+              colors: [Colors.white, Colors.grey[400]],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.2, 1.0],
             ),
           ),
           child: SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: CalculatorView(),
+              child: CalculatorWidget(),
             ),
           ),
         ),

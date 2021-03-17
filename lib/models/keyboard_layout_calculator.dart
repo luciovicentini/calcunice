@@ -4,7 +4,7 @@ class KeyboardLayoutCalculator {
   static const double MIN_MARGIN = 8;
 
   static const BUTTONS_IN_ROW = 4;
-  static const TOTAL_ROWS = 7;
+  static const TOTAL_ROWS = 6;
 
   double widthSize = ORIGINAL_BUTTON_WIDTH;
   double widthMargin;
