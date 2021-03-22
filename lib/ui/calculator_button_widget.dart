@@ -4,7 +4,8 @@ import '../models/keyboard_layout_calculator.dart';
 import '../models/button_model.dart';
 
 class CalculatorButtonWidget extends StatelessWidget {
-  CalculatorButtonWidget(this.calculatorButton, this.keyboardLayout, {Key key})
+  const CalculatorButtonWidget(this.calculatorButton, this.keyboardLayout,
+      {Key? key})
       : super(key: key);
 
   final ButtonModel calculatorButton;
@@ -43,7 +44,7 @@ class CalculatorButtonWidget extends StatelessWidget {
     );
   }
 
-  Widget _getButtonChild(Object icon, Color iconColor, BuildContext context) {
+  Widget _getButtonChild(Object? icon, Color? iconColor, BuildContext context) {
     if (icon is IconData) {
       return Icon(
         icon,

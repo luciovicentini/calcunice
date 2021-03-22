@@ -14,9 +14,13 @@ class KeyboardLayoutCalculator {
 
   bool _recalculate = false;
 
-  KeyboardLayoutCalculator.calculateFromContainerSize(
+  KeyboardLayoutCalculator({this.widthMargin = 0, this.heightMargin = 0});
+
+  static KeyboardLayoutCalculator calculateFromContainerSize(
       double maxWidth, double maxHeight) {
-    _calculate(maxWidth, maxHeight);
+    final keyboard = KeyboardLayoutCalculator();
+    keyboard._calculate(maxWidth, maxHeight);
+    return keyboard;
   }
 
   _calculate(double maxWidth, double maxHeight) {

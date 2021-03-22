@@ -10,220 +10,240 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class ButtonModel {
-  int stepsX = 1;
-  int stepsY = 1;
-  int positionX = 0;
-  int positionY = 0;
-  Object icon;
-  Color iconColor;
-  Color backgroundColor;
+  int stepsX;
+  int stepsY;
+  int positionX;
+  int positionY;
+  Object? icon;
+  Color? iconColor;
+  Color? backgroundColor;
   var action;
 
   ButtonModel(
-      {this.stepsX,
-      this.stepsY,
+      {this.stepsX = 1,
+      this.stepsY = 1,
       this.icon,
       this.iconColor,
       this.backgroundColor,
-      this.positionX,
-      this.positionY,
+      this.positionX = 0,
+      this.positionY = 0,
       this.action});
 
-  ButtonModel.none(String position) {
-    this.stepsX = 0;
-    this.stepsY = 0;
-    _setPositionFromString(position);
+  static ButtonModel none(int positionX, int positionY) {
+    return ButtonModel(
+      positionX: positionX,
+      positionY: positionY,
+    );
   }
 
-  ButtonModel.deleteAll(String position) {
-    _setPositionFromString(position);
-    icon = Icons.arrow_upward_rounded;
-    backgroundColor = kLightArrowUpButtonBackground;
-  }
+  static ButtonModel deleteAll(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: Icons.arrow_upward_rounded,
+        backgroundColor: kLightArrowUpButtonBackground,
+      );
 
-  ButtonModel.delete(String position) {
-    _setPositionFromString(position);
-    icon = 'C';
-    backgroundColor = kLightClearButtonBackground;
-  }
+  static ButtonModel delete(int positionX, int positionY) => ButtonModel(
+        icon: 'C',
+        backgroundColor: kLightClearButtonBackground,
+        positionX: positionX,
+        positionY: positionY,
+      );
 
-  ButtonModel.equals(String position) {
-    _setPositionFromString(position);
-    stepsX = 1;
-    stepsY = 2;
-    icon = '=';
-    iconColor = Colors.white;
-    backgroundColor = kBasicOperationBackgroundColor;
-  }
+  static ButtonModel equals(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        stepsX: 1,
+        stepsY: 2,
+        icon: '=',
+        iconColor: Colors.white,
+        backgroundColor: kBasicOperationBackgroundColor,
+      );
 
-  ButtonModel.add(String position) {
-    _setPositionFromString(position);
-    icon = '+';
-    backgroundColor = kBasicOperationBackgroundLightColor;
-  }
+  static ButtonModel add(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '+',
+        backgroundColor: kBasicOperationBackgroundLightColor,
+      );
 
-  ButtonModel.subtract(String position) {
-    _setPositionFromString(position);
-    icon = '-';
-    backgroundColor = kBasicOperationBackgroundLightColor;
-  }
+  static ButtonModel subtract(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '-',
+        backgroundColor: kBasicOperationBackgroundLightColor,
+      );
 
-  ButtonModel.multiply(String position) {
-    _setPositionFromString(position);
-    icon = 'x';
-    backgroundColor = kBasicOperationBackgroundLightColor;
-  }
+  static ButtonModel multiply(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: 'x',
+        backgroundColor: kBasicOperationBackgroundLightColor,
+      );
 
-  ButtonModel.division(String position) {
-    _setPositionFromString(position);
-    icon = '/';
-    backgroundColor = kBasicOperationBackgroundLightColor;
-  }
+  static ButtonModel division(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '/',
+        backgroundColor: kBasicOperationBackgroundLightColor,
+      );
 
-  ButtonModel.openParenthesis(String position) {
-    _setPositionFromString(position);
-    icon = '(';
-    iconColor = Colors.white;
-    backgroundColor = kLightPurpleBackbround;
-  }
+  static ButtonModel openParenthesis(int positionX, int positionY) =>
+      ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '(',
+        iconColor: Colors.white,
+        backgroundColor: kLightPurpleBackbround,
+      );
 
-  ButtonModel.closeParenthesis(String position) {
-    _setPositionFromString(position);
-    icon = ')';
-    iconColor = Colors.white;
-    backgroundColor = kLightPurpleBackbround;
-  }
+  static ButtonModel closeParenthesis(int positionX, int positionY) =>
+      ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: ')',
+        iconColor: Colors.white,
+        backgroundColor: kLightPurpleBackbround,
+      );
 
-  ButtonModel.squareRoot(String position) {
-    _setPositionFromString(position);
-    icon = '\u221a';
-    iconColor = Colors.white;
-    backgroundColor = kLightPurpleBackbround;
-  }
+  static ButtonModel squareRoot(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '\u221a',
+        iconColor: Colors.white,
+        backgroundColor: kLightPurpleBackbround,
+      );
 
-  ButtonModel.percentage(String position) {
-    _setPositionFromString(position);
-    icon = '%';
-    iconColor = Colors.white;
-    backgroundColor = kLightPurpleBackbround;
-  }
+  static ButtonModel percentage(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '%',
+        iconColor: Colors.white,
+        backgroundColor: kLightPurpleBackbround,
+      );
 
-  ButtonModel.plusMinus(String position) {
-    _setPositionFromString(position);
-    icon = '+/-';
-    iconColor = Colors.white;
-    backgroundColor = kLightPurpleBackbround;
-  }
+  static ButtonModel plusMinus(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '+/-',
+        iconColor: Colors.white,
+        backgroundColor: kLightPurpleBackbround,
+      );
 
-  ButtonModel.zero(String position) {
-    _setPositionFromString(position);
-    icon = '0';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel zero(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '0',
+        iconColor: Colors.white,
+        backgroundColor: kLightPurpleBackbround,
+      );
 
-  ButtonModel.one(String position) {
-    _setPositionFromString(position);
-    icon = '1';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel one(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '1',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.two(String position) {
-    _setPositionFromString(position);
-    icon = '2';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel two(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '2',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.three(String position) {
-    _setPositionFromString(position);
-    icon = '3';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel three(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '3',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.four(String position) {
-    _setPositionFromString(position);
-    icon = '4';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel four(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '4',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.five(String position) {
-    _setPositionFromString(position);
-    icon = '5';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel five(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '5',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.six(String position) {
-    _setPositionFromString(position);
-    icon = '6';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel six(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '6',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.seven(String position) {
-    _setPositionFromString(position);
-    icon = '7';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel seven(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '7',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.eight(String position) {
-    _setPositionFromString(position);
-    icon = '8';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel eight(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '8',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.nine(String position) {
-    _setPositionFromString(position);
-    icon = '9';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel nine(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '9',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.period(String position) {
-    _setPositionFromString(position);
-    icon = '.';
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel period(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: '.',
+        backgroundColor: kNumberBackgroundColor,
+      );
 
-  ButtonModel.backspace(String position) {
-    _setPositionFromString(position);
-    icon = Icons.backspace;
-    backgroundColor = kNumberBackgroundColor;
-  }
+  static ButtonModel backspace(int positionX, int positionY) => ButtonModel(
+        positionX: positionX,
+        positionY: positionY,
+        icon: Icons.backspace,
+        backgroundColor: kNumberBackgroundColor,
+      );
 
   @override
   String toString() {
     return 'ButtonModel{stepsX: $stepsX, stepsY: $stepsY, positionX: $positionX, positionY: $positionY, icon: $icon, iconColor: $iconColor, backgroundColor: $backgroundColor, action: $action}';
   }
 
-  void _setPositionFromString(String position) {
-    assert(position.contains('-'));
-    final positionList = position.split('-');
-    assert(positionList.length == 2);
-    this.positionY = int.tryParse(positionList.first);
-    this.positionX = int.tryParse(positionList.last);
-  }
-
   static final listButtons = <ButtonModel>[
-    ButtonModel.delete('0-0'),
-    ButtonModel.openParenthesis('0-1'),
-    ButtonModel.closeParenthesis('0-2'),
-    ButtonModel.multiply('0-3'),
-    ButtonModel.squareRoot('1-0'),
-    ButtonModel.percentage('1-1'),
-    ButtonModel.plusMinus('1-2'),
-    ButtonModel.division('1-3'),
-    ButtonModel.seven('2-0'),
-    ButtonModel.eight('2-1'),
-    ButtonModel.nine('2-2'),
-    ButtonModel.subtract('2-3'),
-    ButtonModel.six('3-0'),
-    ButtonModel.five('3-1'),
-    ButtonModel.four('3-2'),
-    ButtonModel.add('3-3'),
-    ButtonModel.three('4-0'),
-    ButtonModel.two('4-1'),
-    ButtonModel.one('4-2'),
-    ButtonModel.equals('4-3'),
-    ButtonModel.period('5-0'),
-    ButtonModel.zero('5-1'),
-    ButtonModel.backspace('5-2'),
-    ButtonModel.none('5-3')
+    ButtonModel.delete(0, 0),
+    ButtonModel.openParenthesis(0, 1),
+    ButtonModel.closeParenthesis(0, 2),
+    ButtonModel.multiply(0, 3),
+    ButtonModel.squareRoot(1, 0),
+    ButtonModel.percentage(1, 1),
+    ButtonModel.plusMinus(1, 2),
+    ButtonModel.division(1, 3),
+    ButtonModel.seven(2, 0),
+    ButtonModel.eight(2, 1),
+    ButtonModel.nine(2, 2),
+    ButtonModel.subtract(2, 3),
+    ButtonModel.four(3, 0),
+    ButtonModel.five(3, 1),
+    ButtonModel.six(3, 2),
+    ButtonModel.add(3, 3),
+    ButtonModel.one(4, 0),
+    ButtonModel.two(4, 1),
+    ButtonModel.three(4, 2),
+    ButtonModel.equals(4, 3),
+    ButtonModel.period(5, 0),
+    ButtonModel.zero(5, 1),
+    ButtonModel.backspace(5, 2),
+    ButtonModel.none(5, 3)
   ];
 }

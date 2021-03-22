@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.white, Colors.grey[400]],
+              colors: [Colors.white, Colors.grey[400] ?? Colors.grey],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               stops: [0.2, 1.0],
