@@ -11,18 +11,19 @@ void main() {
   testCalculator('6/5x0', 0);
   testCalculator('0/5x0', 0);
   testCalculator('3+2x3/4-3.5+31.42', 32.42);
-  testCalculator('5.3234/3.4123', 1.56006212818);
+  testCalculator('5.3234/3.4123', 1.560062128183337);
   testCalculator('8/2+2', 6);
   testCalculator('8/(2+2)', 2);
   testCalculator('(8+2)/2', 5);
   testCalculator('4x(8-4)/2', 8);
   testCalculator('(4+5)x4/(3+1)', 9);
+  testCalculator('(4+5x(3+1))x4/(3+1)', 24);
 }
 
 void testCalculator(String testExpression, double result) {
   test('-------- Expression: $testExpression should return $result --------',
       () {
     final calcu = Calculator(testExpression);
-    expect(calcu.getResult, result);
+    expect(calcu.getResult(), result);
   });
 }

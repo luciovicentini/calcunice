@@ -1,195 +1,218 @@
-import 'dart:convert';
+import 'dart:math';
 
-import 'package:calcunice/models/resultable.dart';
-
-import 'math_number.dart';
 import 'math_operator.dart';
 
-class MathExpression with Resultable {
-  MathExpression(
-      {this.resultableLeft = const MathNumber(0),
-      this.mathOperator,
-      this.resultableRight = const MathNumber(0)});
+class MathExpression {
+  static const String NEGATIVE_NUM_FLAG = 'm';
 
-  static MathExpression fromString(String expression) {
-    final mathExpression = MathExpression();
-    mathExpression._parseStringExpression(expression);
-    return mathExpression;
+  final String expression;
+  MathExpression({required this.expression});
+
+  double get result => processMathExpression(this.expression);
+
+  double processMathExpression(String expression) {
+    print(expression);
+    if (_expressionHasParenthesis(expression)) {
+      final openParenIndex = expression.indexOf('(');
+      final closeParenIndex = expression.indexOf(')');
+      final expressionWithoutParen =
+          expression.substring(openParenIndex + 1, closeParenIndex);
+      final double expresionParenResult =
+          processMathExpression(expressionWithoutParen);
+      expression = replaceExpressionWithResult(
+          expression, '($expressionWithoutParen)', expresionParenResult);
+    } else {
+      final String simpleExpression = findNextSingleExpression(expression);
+      final double simpleExpressionResult =
+          resolveSimpleStringExpression(simpleExpression);
+      expression = replaceExpressionWithResult(
+          expression, simpleExpression, simpleExpressionResult);
+    }
+    if (qtyMathOperators(expression) == 0) {
+      return double.parse(_parseNegativeNumFlag(expression));
+    } else {
+      return processMathExpression(expression);
+    }
   }
 
-  MathOperator? mathOperator;
-  Resultable resultableLeft;
-  Resultable resultableRight;
+  String findNextSingleExpression(String expression) {
+    final mathOperator = getNextMathOperator(expression);
+    final String mathOperatorString = mathOperatorStringMap[mathOperator]!;
+    final leftSideString =
+        _getLeftSideStringFromMO(expression, mathOperatorString);
+    final rightSideString =
+        _getRightSideStringFromMo(expression, mathOperatorString);
+    return leftSideString + mathOperatorString + rightSideString;
+  }
 
-  @override
-  double getResult() {
+  bool _expressionHasParenthesis(String expression) =>
+      expression.contains('(') || expression.contains(')');
+
+  String _getLeftSideStringFromMO(String expression, String mathOperator) {
+    final allLeftSideChars =
+        expression.substring(0, expression.indexOf(mathOperator)).split('');
+    if (checkIfListCharHasMathOper(allLeftSideChars)) {
+      return allLeftSideChars
+          .sublist(getIndexOfLastMathOperator(allLeftSideChars) + 1)
+          .join('');
+    }
+    return allLeftSideChars.join('');
+  }
+
+  String _getRightSideStringFromMo(String expression, String mathOperator) {
+    final allRightSideChars =
+        expression.substring(expression.indexOf(mathOperator) + 1).split('');
+    if (checkIfListCharHasMathOper(allRightSideChars)) {
+      return allRightSideChars
+          .sublist(0, _getIndexOfNextMathOperator(allRightSideChars))
+          .join('');
+    }
+    return allRightSideChars.join('');
+  }
+
+  String replaceExpressionWithResult(
+      String expression, String simpleExpression, double result) {
+    var stringResult = result.toString();
+    if (result < 0) {
+      stringResult = '$NEGATIVE_NUM_FLAG${result.abs()}';
+    }
+    return expression.replaceFirst(simpleExpression, stringResult);
+  }
+
+  int qtyMathOperators(String expression) {
+    var qtyMathOperators = 0;
+    final expressionList = expression.split('');
+    for (var char in expressionList) {
+      if (mathOperatorMap.keys.contains(char)) {
+        qtyMathOperators++;
+      }
+    }
+    return qtyMathOperators;
+  }
+
+  double resolveSimpleStringExpression(String expression) {
+    print(expression);
+    for (var mathOperatorString in mathOperatorMap.keys) {
+      if (expression.contains(mathOperatorString)) {
+        final numbersList = expression.split(mathOperatorString);
+        return resolveSimpleExpression(
+            numbersList[0], mathOperatorString, numbersList[1]);
+      }
+    }
+    throw UnimplementedError(
+        'Expression {$expression} has a math operator not implemented yet.');
+  }
+
+  double resolveSimpleExpression(String leftSideString,
+      String mathOperatorString, String rightSideString) {
+    final MathOperator mathOperator = mathOperatorMap[mathOperatorString]!;
+    final leftSide = double.parse(_parseNegativeNumFlag(leftSideString));
+    final rightSide = double.parse(_parseNegativeNumFlag(rightSideString));
     switch (mathOperator) {
       case MathOperator.addition:
-        return resultableLeft.getResult() + resultableRight.getResult();
+        return leftSide + rightSide;
       case MathOperator.substraction:
-        return resultableLeft.getResult() - resultableRight.getResult();
+        return leftSide - rightSide;
       case MathOperator.multiplication:
-        return resultableLeft.getResult() * resultableRight.getResult();
+        return leftSide * rightSide;
       case MathOperator.division:
-        if (resultableLeft.getResult() == 0 ||
-            resultableRight.getResult() == 0) {
+        if (leftSide == 0 || rightSide == 0) {
           return 0;
         }
-        return resultableLeft.getResult() / resultableRight.getResult();
+        return leftSide / rightSide;
       default:
         throw UnimplementedError();
     }
   }
 
-  _parseStringExpression(String expression) {
-    _validateExpression(expression);
-    print(expression);
-    var expressionMathOperator;
-    if (_hasParenthesis(expression)) {
-      final openParenthesisIndex = _getOpeningParenthesisIndex(expression);
-      final closingParenthesisIndex = _getClosingParenthesisIndex(expression);
-      if (openParenthesisIndex == 0 &&
-          closingParenthesisIndex == expression.length - 1) {
-        expression = _removeParenthesis(expression);
-        expressionMathOperator = _getNextMathOperator(expression);
-      } else {
-        if (openParenthesisIndex != 0) {
-          final expressionMathOperatorString = expression.substring(
-              openParenthesisIndex - 1, openParenthesisIndex);
-          print('$expressionMathOperatorString');
-          expressionMathOperator =
-              mathOperatorMap[expressionMathOperatorString];
-        } else {
-          final expressionMathOperatorString = expression.substring(
-              closingParenthesisIndex + 1, closingParenthesisIndex + 2);
-
-          print('$expressionMathOperatorString');
-          expressionMathOperator =
-              mathOperatorMap[expressionMathOperatorString];
-        }
-      }
-    } else {
-      expressionMathOperator = _getNextMathOperator(expression);
-    }
-    final listExpression = _subString(
-        expression,
-        expression.lastIndexOf(
-            mathOperatorStringMap[expressionMathOperator] as String));
-    final left = double.tryParse(listExpression[0]);
-    final right = double.tryParse(listExpression[1]);
-
-    this.resultableLeft = left != null
-        ? MathNumber(left)
-        : MathExpression.fromString(listExpression[0]);
-    this.resultableRight = right != null
-        ? MathNumber(right)
-        : MathExpression.fromString(listExpression[1]);
-    this.mathOperator = expressionMathOperator;
-  }
-
-  MathOperator? _getNextMathOperator(String expression) {
-    final addSubOperator = _getNextAddOrSubOperator(expression);
-    if (addSubOperator != null) {
-      return addSubOperator;
-    }
+  MathOperator getNextMathOperator(String expression) {
     final multiDivOperator = _getNextMultiOrDivOperator(expression);
     if (multiDivOperator != null) {
       return multiDivOperator;
     }
-    return null;
+    final addSubOperator = _getNextAddOrSubOperator(expression);
+    if (addSubOperator != null) {
+      return addSubOperator;
+    }
+    throw UnimplementedError();
   }
 
   MathOperator? _getNextMultiOrDivOperator(String expression) {
-    final multiOperator = expression.lastIndexOf(
-        mathOperatorStringMap[MathOperator.multiplication] as String);
-    final divisionIndex = expression
-        .lastIndexOf(mathOperatorStringMap[MathOperator.division] as String);
+    final multiOperator =
+        expression.indexOf(mathOperatorStringMap[MathOperator.multiplication]!);
+    final divisionIndex =
+        expression.indexOf(mathOperatorStringMap[MathOperator.division]!);
 
     if (multiOperator == -1 && divisionIndex == -1) return null;
 
-    if (multiOperator == -1 && divisionIndex != -1) {
+    if (divisionIndex != -1 && multiOperator == -1) {
       return MathOperator.division;
     }
-    if (multiOperator != 1 && divisionIndex == -1) {
+    if (multiOperator != -1 && divisionIndex == -1) {
       return MathOperator.multiplication;
     }
 
-    return multiOperator > divisionIndex
+    return multiOperator < divisionIndex
         ? MathOperator.multiplication
         : MathOperator.division;
   }
 
   MathOperator? _getNextAddOrSubOperator(String expression) {
     final additionIndex = expression
-        .lastIndexOf(mathOperatorStringMap[MathOperator.addition] as String);
-    final substractionIndex = expression.lastIndexOf(
-        mathOperatorStringMap[MathOperator.substraction] as String);
+        .indexOf(mathOperatorStringMap[MathOperator.addition] as String);
+    final substractionIndex = expression
+        .indexOf(mathOperatorStringMap[MathOperator.substraction] as String);
 
     if (substractionIndex == -1 && additionIndex == -1) return null;
 
-    if (substractionIndex == -1 && additionIndex != -1) {
+    if (additionIndex != -1 && substractionIndex == -1) {
       return MathOperator.addition;
     }
-    if (additionIndex == -1 && substractionIndex != -1) {
+    if (substractionIndex != -1 && additionIndex == -1) {
       return MathOperator.substraction;
     }
-    return additionIndex > substractionIndex
+    return additionIndex < substractionIndex
         ? MathOperator.addition
         : MathOperator.substraction;
   }
 
-  List<String> _subString(String expression, int index) {
-    final list = <String>[];
-    list.add(expression.substring(0, index));
-    list.add(expression.substring(index + 1));
-    return list;
-  }
-
-  Map<String, dynamic> toJson() => {
-        'resultableLeft': resultableLeft.toJson(),
-        'mathOperator': mathOperator.toString(),
-        'resultableRight': resultableRight.toJson()
-      };
-
-  MathExpression.fromJson(Map<String, dynamic> json)
-      : resultableLeft = MathNumber(0),
-        resultableRight = MathNumber(0);
-
-  void _validateExpression(String expression) {
-    var hasMathOperator = false;
-    for (var mathOperator in mathOperatorMap.keys) {
-      // print(
-      //     '$expression has $mathOperator? ${expression.contains(mathOperator)}');
-      if (expression.contains(mathOperator)) {
-        hasMathOperator = true;
-        break;
+  int _getIndexOfNextMathOperator(List<String> expression) {
+    var nextIndex = -1;
+    for (var mathOperatorString in mathOperatorMap.keys) {
+      final index = expression.indexOf(mathOperatorString);
+      if (index > 0) {
+        if (nextIndex == -1 || index < nextIndex) {
+          nextIndex = index;
+        }
       }
     }
-    if (!hasMathOperator) {
-      throw Exception("$expression has a math operator not supported");
-    }
-    if (expression.contains('(') && !expression.contains(')')) {
-      throw Exception(
-          "$expression has an opening parenthesis but not a closing one.");
-    }
-    if (expression.contains(')') && !expression.contains('(')) {
-      throw Exception(
-          "$expression has a closing parenthesis but not an opening one.");
-    }
+    return nextIndex;
   }
+
+  bool checkIfListCharHasMathOper(List<String> listChar) {
+    for (var mathOperator in mathOperatorMap.keys) {
+      if (listChar.contains(mathOperator)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  int getIndexOfLastMathOperator(List<String> listChar) {
+    var lastIndex = 0;
+    for (var mathOperator in mathOperatorMap.keys) {
+      if (listChar.contains(mathOperator)) {
+        final index = listChar.lastIndexOf(mathOperator);
+        if (lastIndex == 0 || index > lastIndex) {
+          lastIndex = index;
+        }
+      }
+    }
+    return lastIndex;
+  }
+
+  String _parseNegativeNumFlag(String number) =>
+      number.contains(NEGATIVE_NUM_FLAG)
+          ? number.replaceFirst(NEGATIVE_NUM_FLAG, '-')
+          : number;
 }
-
-bool _hasParenthesis(String expression) =>
-    expression.contains('(') || expression.contains(')');
-
-String _removeParenthesis(String expression) {
-  final openParenthesisIndex = _getOpeningParenthesisIndex(expression);
-  final closingParenthesisIndex = _getClosingParenthesisIndex(expression);
-  return expression.substring(0, openParenthesisIndex) +
-      expression.substring(openParenthesisIndex + 1, closingParenthesisIndex) +
-      expression.substring(closingParenthesisIndex + 1, expression.length);
-}
-
-int _getOpeningParenthesisIndex(String expression) => expression.indexOf('(');
-int _getClosingParenthesisIndex(String expression) =>
-    expression.lastIndexOf(')');

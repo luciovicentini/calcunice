@@ -1,13 +1,13 @@
-import 'math_expression.dart';
+// import 'math_expression.dart';
+
+import 'package:calcunice/models/math_expression.dart';
 
 class Calculator {
   static const precisionDecimalPoint = 11;
   final String mathExpressionString;
-  final MathExpression mathExpression;
 
-  Calculator(this.mathExpressionString)
-      : this.mathExpression = MathExpression.fromString(mathExpressionString);
+  Calculator(this.mathExpressionString);
 
-  double get getResult => double.parse(
-      mathExpression.getResult().toStringAsFixed(precisionDecimalPoint));
+  double getResult() =>
+      MathExpression(expression: this.mathExpressionString).result;
 }
