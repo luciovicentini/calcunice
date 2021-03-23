@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'math_operator.dart';
 
 class MathExpression {
@@ -11,16 +9,11 @@ class MathExpression {
   double get result => processMathExpression(this.expression);
 
   double processMathExpression(String expression) {
-    print(expression);
     if (_expressionHasParenthesis(expression)) {
-      final openParenIndex = expression.indexOf('(');
-      final closeParenIndex = expression.indexOf(')');
-      final expressionWithoutParen =
-          expression.substring(openParenIndex + 1, closeParenIndex);
-      final double expresionParenResult =
-          processMathExpression(expressionWithoutParen);
+      final expressionParen = getExpressionBetweenParenthesis(expression);
+      final expresionParenResult = processMathExpression(expressionParen);
       expression = replaceExpressionWithResult(
-          expression, '($expressionWithoutParen)', expresionParenResult);
+          expression, '($expressionParen)', expresionParenResult);
     } else {
       final String simpleExpression = findNextSingleExpression(expression);
       final double simpleExpressionResult =
@@ -35,6 +28,12 @@ class MathExpression {
     }
   }
 
+  String getExpressionBetweenParenthesis(String expression) {
+    final openParenIndex = expression.indexOf('(');
+    final closeParenIndex = _indexNextClosingParenthesis(expression);
+    return expression.substring(openParenIndex + 1, closeParenIndex);
+  }
+
   String findNextSingleExpression(String expression) {
     final mathOperator = getNextMathOperator(expression);
     final String mathOperatorString = mathOperatorStringMap[mathOperator]!;
@@ -44,9 +43,6 @@ class MathExpression {
         _getRightSideStringFromMo(expression, mathOperatorString);
     return leftSideString + mathOperatorString + rightSideString;
   }
-
-  bool _expressionHasParenthesis(String expression) =>
-      expression.contains('(') || expression.contains(')');
 
   String _getLeftSideStringFromMO(String expression, String mathOperator) {
     final allLeftSideChars =
@@ -91,7 +87,6 @@ class MathExpression {
   }
 
   double resolveSimpleStringExpression(String expression) {
-    print(expression);
     for (var mathOperatorString in mathOperatorMap.keys) {
       if (expression.contains(mathOperatorString)) {
         final numbersList = expression.split(mathOperatorString);
@@ -215,4 +210,31 @@ class MathExpression {
       number.contains(NEGATIVE_NUM_FLAG)
           ? number.replaceFirst(NEGATIVE_NUM_FLAG, '-')
           : number;
+
+  bool _expressionHasParenthesis(String expression) =>
+      expression.contains('(') || expression.contains(')');
+
+  int _indexNextClosingParenthesis(String expression) {
+    if (!_expressionHasParenthesis(expression))
+      throw Exception('$expression must have opening and closing parenthesis.');
+
+    final charList = expression.split('');
+    var open = 0;
+    var close = 0;
+
+    for (var i = 0; i < charList.length; i++) {
+      final char = charList[i];
+      if (char != '(' && char != ')') continue;
+      if (char == ('(')) {
+        open++;
+      }
+      if (char == (')')) {
+        close++;
+      }
+      if (char == ')' && open == close) {
+        return i;
+      }
+    }
+    return -1;
+  }
 }

@@ -143,4 +143,12 @@ void main() {
     final expression = MathExpression(expression: '');
     expect(expression.processMathExpression('40/0'), 0);
   });
+
+  test(
+      '-------- Testing MathExpression.getExpressionBetweenParenthesis() --------',
+      () {
+    final expression = MathExpression(expression: '');
+    expect(expression.getExpressionBetweenParenthesis('(4+5x(3+1))x4/(3+1)'),
+        '4+5x(3+1)');
+  });
 }

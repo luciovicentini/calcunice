@@ -18,6 +18,13 @@ void main() {
   testCalculator('4x(8-4)/2', 8);
   testCalculator('(4+5)x4/(3+1)', 9);
   testCalculator('(4+5x(3+1))x4/(3+1)', 24);
+  testCalculator('(4+(5x(3+1))x4)/(3+1)', 21);
+  testCalculator('(m4x4)/4+4', 0);
+  testCalculator('2.6x4.5/6.5+3.44', 5.24);
+
+  testCalculator('20%100', 100);
+  testCalculator('√(9)', 3);
+  testCalculator('√(9x9)', 9);
 }
 
 void testCalculator(String testExpression, double result) {
