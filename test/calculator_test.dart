@@ -22,15 +22,22 @@ void main() {
   testCalculator('(m4x4)/4+4', 0);
   testCalculator('2.6x4.5/6.5+3.44', 5.24);
 
-  testCalculator('20%100', 100);
-  testCalculator('√(9)', 3);
+  testCalculator('20%100', 20);
+  testCalculator('20%40', 8);
+  testCalculator('20%50%50', 5);
+  testCalculator('2+20%40', 10);
+  testCalculator('(20+20)%(40x2+20)', 40);
+  testCalculator('20+20%40x2+20', 56);
+
+  testCalculator('√9', 3);
   testCalculator('√(9x9)', 9);
+  testCalculator('10+√(9x9)', 19);
+  testCalculator('1+√(81+10-15+5x1)x2', 19);
 }
 
 void testCalculator(String testExpression, double result) {
-  test('-------- Expression: $testExpression should return $result --------',
-      () {
+  test('-------- $testExpression should return $result --------', () {
     final calcu = Calculator(testExpression);
-    expect(calcu.getResult(), result);
+    expect(calcu.result, result);
   });
 }
