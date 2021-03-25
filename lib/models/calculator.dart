@@ -14,9 +14,14 @@ class Calculator {
   double processMathExpression(String expression) {
     if (_expressionHasParenthesis(expression)) {
       final expressionParen = getExpressionBetweenParenthesis(expression);
-      final expresionParenResult = processMathExpression(expressionParen);
+      var expressionParentResult = 0.0;
+      if (qtyMathOperators(expressionParen) == 0) {
+        expressionParentResult = double.parse(expressionParen);
+      } else {
+        expressionParentResult = processMathExpression(expressionParen);
+      }
       expression = replaceExpressionWithResult(
-          expression, '($expressionParen)', expresionParenResult);
+          expression, '($expressionParen)', expressionParentResult);
     } else {
       final String simpleExpression = findNextSingleExpression(expression);
       final double simpleExpressionResult =

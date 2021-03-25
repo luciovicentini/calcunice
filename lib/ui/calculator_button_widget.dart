@@ -1,9 +1,11 @@
+import 'package:calcunice/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/keyboard_layout_calculator.dart';
 import '../models/button_model.dart';
 
-class CalculatorButtonWidget extends StatelessWidget {
+class CalculatorButtonWidget extends ConsumerWidget {
   const CalculatorButtonWidget(this.calculatorButton, this.keyboardLayout,
       {Key? key})
       : super(key: key);
@@ -12,7 +14,7 @@ class CalculatorButtonWidget extends StatelessWidget {
   final KeyboardLayoutCalculator keyboardLayout;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
     final buttonHeight =
         keyboardLayout.calculateHeight(calculatorButton.stepsY);
     final buttonWidth = keyboardLayout.calculateWidth(calculatorButton.stepsX);
@@ -23,7 +25,7 @@ class CalculatorButtonWidget extends StatelessWidget {
         elevation: 4,
         child: InkWell(
           onTap: () {
-            print(calculatorButton);
+            onButtonTap(context.read);
           },
           child: Container(
             height: buttonHeight,
@@ -42,6 +44,21 @@ class CalculatorButtonWidget extends StatelessWidget {
       left: (keyboardLayout.widthSize + keyboardLayout.widthMargin) *
           calculatorButton.positionX,
     );
+  }
+
+  void onButtonTap(read) {
+    final String displayString = read(displayProvider).state;
+    if (calculatorButton.action != null) {
+      read(displayProvider).state = calculatorButton.action!(displayString);
+    } else {
+      if (displayString.isEmpty) return;
+
+      final calculator = read(calculatorProvider(displayString));
+      final historicListProviderList = read(historicCalculationsProvider).state;
+      historicListProviderList.add('$displayString = ${calculator.result}');
+      read(historicCalculationsProvider).state = historicListProviderList;
+      read(displayProvider).state = '';
+    }
   }
 
   Widget _getButtonChild(Object? icon, Color? iconColor, BuildContext context) {

@@ -14,7 +14,6 @@ class KeyboardLayoutWidget extends StatelessWidget {
         var keyboardLayout =
             KeyboardLayoutCalculator.calculateFromContainerSize(
                 constraints.maxWidth, constraints.maxHeight);
-
         return Stack(
           children: [
             for (var button in ButtonModel.listButtons)

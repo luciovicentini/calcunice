@@ -14,6 +14,7 @@ void main() {
   testCalculator('5.3234/3.4123', 1.560062128183337);
   testCalculator('8/2+2', 6);
   testCalculator('8/(2+2)', 2);
+  testCalculator('8/(4)', 2);
   testCalculator('(8+2)/2', 5);
   testCalculator('4x(8-4)/2', 8);
   testCalculator('(4+5)x4/(3+1)', 9);
@@ -29,7 +30,7 @@ void main() {
   testCalculator('(20+20)%(40x2+20)', 40);
   testCalculator('20+20%40x2+20', 56);
 
-  testCalculator('√9', 3);
+  testCalculator('√(9)', 3);
   testCalculator('√(9x9)', 9);
   testCalculator('10+√(9x9)', 19);
   testCalculator('1+√(81+10-15+5x1)x2', 19);
