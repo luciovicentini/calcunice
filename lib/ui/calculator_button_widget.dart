@@ -31,7 +31,10 @@ class CalculatorButtonWidget extends ConsumerWidget {
             height: buttonHeight,
             width: buttonWidth,
             child: _getButtonChild(
-                calculatorButton.icon, calculatorButton.iconColor, context),
+              calculatorButton.icon,
+              calculatorButton.text,
+              calculatorButton.childColor,
+            ),
             decoration: BoxDecoration(
               color: calculatorButton.backgroundColor,
               borderRadius: BorderRadius.circular(26.0),
@@ -47,40 +50,42 @@ class CalculatorButtonWidget extends ConsumerWidget {
   }
 
   void onButtonTap(read) {
-    final String displayString = read(displayProvider).state;
-    if (calculatorButton.action != null) {
-      read(displayProvider).state = calculatorButton.action!(displayString);
-    } else {
-      if (displayString.isEmpty) return;
-
-      final calculator = read(calculatorProvider(displayString));
+    /* final String displayString = read(displayProvider).state;
+    final String expressionString = read(expressionProvider).state;
+    if (calculatorButton.isEqualButton) {
+      if (expressionString.isEmpty) return;
+      final calculator = read(calculatorProvider(expressionString));
       final historicListProviderList = read(historicCalculationsProvider).state;
       historicListProviderList.add('$displayString = ${calculator.result}');
       read(historicCalculationsProvider).state = historicListProviderList;
       read(displayProvider).state = '';
-    }
+      read(expressionProvider).state = '';
+    } else {
+      read(displayProvider).state =
+          calculatorButton.displayAction!(displayString);
+      read(expressionProvider).state =
+          calculatorButton.expressionAction!(expressionString);
+    } */
   }
 
-  Widget _getButtonChild(Object? icon, Color? iconColor, BuildContext context) {
-    if (icon is IconData) {
+  Widget _getButtonChild(IconData? icon, String? text, Color childColor) {
+    if (icon != null) {
       return Icon(
         icon,
-        color: iconColor,
+        color: childColor,
       );
-    } else if (icon is String) {
+    } else {
       return Center(
         child: Text(
-          icon,
+          text!,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: iconColor,
+            color: childColor,
             fontWeight: FontWeight.bold,
             fontSize: 30.0,
           ),
         ),
       );
-    } else {
-      return SizedBox.shrink();
     }
   }
 }
