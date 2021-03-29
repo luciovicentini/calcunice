@@ -1,13 +1,11 @@
-import 'package:calcunice/models/button_action.dart';
-import 'package:calcunice/models/calculator.dart';
-import 'package:calcunice/providers.dart';
+import 'package:calcunice/ui/ButtonAnimated.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../models/keyboard_layout_calculator.dart';
 import '../models/button_model.dart';
 
-class CalculatorButtonWidget extends ConsumerWidget {
+class CalculatorButtonWidget extends HookWidget {
   const CalculatorButtonWidget(this.calculatorButton, this.keyboardLayout,
       {Key? key})
       : super(key: key);
@@ -16,81 +14,28 @@ class CalculatorButtonWidget extends ConsumerWidget {
   final KeyboardLayoutCalculator keyboardLayout;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context) {
+    final animationController = useAnimationController(
+        duration: Duration(milliseconds: 100), initialValue: 4, upperBound: 4);
+    animationController.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        animationController.forward();
+      }
+    });
     final buttonHeight =
         keyboardLayout.calculateHeight(calculatorButton.stepsY);
     final buttonWidth = keyboardLayout.calculateWidth(calculatorButton.stepsX);
     return Positioned(
-      child: PhysicalModel(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(26.0),
-        elevation: 4,
-        child: InkWell(
-          onTap: () => onTap(context.read),
-          child: Container(
-            height: buttonHeight,
-            width: buttonWidth,
-            child: _getButtonChild(
-              calculatorButton.icon,
-              calculatorButton.text,
-              calculatorButton.childColor,
-            ),
-            decoration: BoxDecoration(
-              color: calculatorButton.backgroundColor,
-              borderRadius: BorderRadius.circular(26.0),
-            ),
-          ),
-        ),
+      child: AnimatedCalculatorButtonWidget(
+        buttonHeight: buttonHeight,
+        buttonWidth: buttonWidth,
+        calculatorButton: calculatorButton,
+        elevation: animationController,
       ),
       top: (keyboardLayout.heightSize + keyboardLayout.heightMargin) *
           calculatorButton.positionY,
       left: (keyboardLayout.widthSize + keyboardLayout.widthMargin) *
           calculatorButton.positionX,
     );
-  }
-
-  void onTap(read) {
-    final displayModel = read(displayProvider);
-    displayModel.onButtonTap(calculatorButton.buttonAction);
-    if (calculatorButton.buttonAction == ButtonAction.equals &&
-        displayModel.line.isNotEmpty) {
-      final calculatorModel = read(calculatorProvider);
-      final String newExpression =
-          handleEquals(displayModel.line, calculatorModel);
-      updateHistoricExpressionsList(read, newExpression);
-      displayModel.clearLine();
-    }
-  }
-
-  void updateHistoricExpressionsList(read, String newExpression) {
-    final expressionList = read(historicCalculationsProvider).state;
-    expressionList.add(newExpression);
-    read(historicCalculationsProvider).state = expressionList;
-  }
-
-  String handleEquals(String expression, Calculator calculatorModel) {
-    final double result = calculatorModel.getResult(expression);
-    return '$expression = $result';
-  }
-
-  Widget _getButtonChild(IconData? icon, String? text, Color childColor) {
-    if (icon != null) {
-      return Icon(
-        icon,
-        color: childColor,
-      );
-    } else {
-      return Center(
-        child: Text(
-          text!,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: childColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 30.0,
-          ),
-        ),
-      );
-    }
   }
 }
