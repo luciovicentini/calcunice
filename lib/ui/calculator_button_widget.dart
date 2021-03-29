@@ -1,3 +1,5 @@
+import 'package:calcunice/models/button_action.dart';
+import 'package:calcunice/models/calculator.dart';
 import 'package:calcunice/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -24,9 +26,7 @@ class CalculatorButtonWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(26.0),
         elevation: 4,
         child: InkWell(
-          onTap: () {
-            onButtonTap(context.read);
-          },
+          onTap: () => onTap(context.read),
           child: Container(
             height: buttonHeight,
             width: buttonWidth,
@@ -49,23 +49,28 @@ class CalculatorButtonWidget extends ConsumerWidget {
     );
   }
 
-  void onButtonTap(read) {
-    /* final String displayString = read(displayProvider).state;
-    final String expressionString = read(expressionProvider).state;
-    if (calculatorButton.isEqualButton) {
-      if (expressionString.isEmpty) return;
-      final calculator = read(calculatorProvider(expressionString));
-      final historicListProviderList = read(historicCalculationsProvider).state;
-      historicListProviderList.add('$displayString = ${calculator.result}');
-      read(historicCalculationsProvider).state = historicListProviderList;
-      read(displayProvider).state = '';
-      read(expressionProvider).state = '';
-    } else {
-      read(displayProvider).state =
-          calculatorButton.displayAction!(displayString);
-      read(expressionProvider).state =
-          calculatorButton.expressionAction!(expressionString);
-    } */
+  void onTap(read) {
+    final displayModel = read(displayProvider);
+    displayModel.onButtonTap(calculatorButton.buttonAction);
+    if (calculatorButton.buttonAction == ButtonAction.equals &&
+        displayModel.line.isNotEmpty) {
+      final calculatorModel = read(calculatorProvider);
+      final String newExpression =
+          handleEquals(displayModel.line, calculatorModel);
+      updateHistoricExpressionsList(read, newExpression);
+      displayModel.clearLine();
+    }
+  }
+
+  void updateHistoricExpressionsList(read, String newExpression) {
+    final expressionList = read(historicCalculationsProvider).state;
+    expressionList.add(newExpression);
+    read(historicCalculationsProvider).state = expressionList;
+  }
+
+  String handleEquals(String expression, Calculator calculatorModel) {
+    final double result = calculatorModel.getResult(expression);
+    return '$expression = $result';
   }
 
   Widget _getButtonChild(IconData? icon, String? text, Color childColor) {

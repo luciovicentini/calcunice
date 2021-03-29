@@ -9,9 +9,6 @@ import 'package:calcunice/models/button_action.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-/* TODO dejar esta clase para definir la UI y armar otra clase para modelar
- botones dentro de CalculatorModel y generar Ids unicos desde el modelo de
-  botones(UI al modelo de botones(BL) */
 
 class ButtonModel {
   final int stepsX;
@@ -23,9 +20,6 @@ class ButtonModel {
   final Color childColor;
   final Color backgroundColor;
   final ButtonAction buttonAction;
-  /* bool isEqualButton;
-  String Function(String)? displayAction;
-  String Function(String)? expressionAction; */
 
   const ButtonModel({
     this.stepsX = 1,
@@ -37,209 +31,7 @@ class ButtonModel {
     required this.positionX,
     required this.positionY,
     required this.buttonAction,
-    /* this.isEqualButton = false,
-      this.displayAction,
-      this.expressionAction */
   });
-
-  /*
-  static ButtonModel equals(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        stepsX: 1,
-        stepsY: 2,
-        icon: '=',
-        isEqualButton: true,
-        iconColor: Colors.white,
-        backgroundColor: kBasicOperationBackgroundColor,
-      );
-
-  static ButtonModel add(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '+',
-        backgroundColor: kBasicOperationBackgroundLightColor,
-        displayAction: (displayString) => displayString + ' + ',
-        expressionAction: (expression) => expression + ' + ',
-      );
-
-  static ButtonModel subtract(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '-',
-        backgroundColor: kBasicOperationBackgroundLightColor,
-        displayAction: (displayString) => displayString + ' - ',
-        expressionAction: (expression) => expression + ' - ',
-      );
-
-  static ButtonModel multiply(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: 'x',
-        backgroundColor: kBasicOperationBackgroundLightColor,
-        displayAction: (displayString) => displayString + ' x ',
-        expressionAction: (expression) => expression + ' x ',
-      );
-
-  static ButtonModel division(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '/',
-        backgroundColor: kBasicOperationBackgroundLightColor,
-        displayAction: (displayString) => displayString + ' ÷ ',
-        expressionAction: (expression) => expression + ' / ',
-      );
-
-  static ButtonModel openParenthesis(int positionX, int positionY) =>
-      ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '(',
-        iconColor: Colors.white,
-        backgroundColor: kLightPurpleBackbround,
-        displayAction: (displayString) => displayString + '(',
-        expressionAction: (expression) => expression + '(',
-      );
-
-  static ButtonModel closeParenthesis(int positionX, int positionY) =>
-      ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: ')',
-        iconColor: Colors.white,
-        backgroundColor: kLightPurpleBackbround,
-        displayAction: (displayString) => displayString + ')',
-        expressionAction: (expression) => expression + ')',
-      );
-
-  static ButtonModel percentage(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '%',
-        iconColor: Colors.white,
-        backgroundColor: kLightPurpleBackbround,
-        displayAction: (displayString) => displayString + '% of ',
-        expressionAction: (expression) => expression + '%',
-      );
-
-  static ButtonModel plusMinus(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '+/-',
-        iconColor: Colors.white,
-        backgroundColor: kLightPurpleBackbround,
-        // TODO implmement displayaction y expressionAction
-      );
-
-  static ButtonModel zero(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '0',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '0',
-        expressionAction: (expression) => expression + '0',
-      );
-
-  static ButtonModel one(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '1',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '1',
-        expressionAction: (expression) => expression + '1',
-      );
-
-  static ButtonModel two(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '2',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '2',
-        expressionAction: (expression) => expression + '2',
-      );
-
-  static ButtonModel three(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '3',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '3',
-        expressionAction: (expression) => expression + '3',
-      );
-
-  static ButtonModel four(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '4',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '4',
-        expressionAction: (expression) => expression + '4',
-      );
-
-  static ButtonModel five(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '5',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '5',
-        expressionAction: (expression) => expression + '5',
-      );
-
-  static ButtonModel six(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '6',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '6',
-        expressionAction: (expression) => expression + '6',
-      );
-
-  static ButtonModel seven(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '7',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '7',
-        expressionAction: (expression) => expression + '7',
-      );
-
-  static ButtonModel eight(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '8',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '8',
-        expressionAction: (expression) => expression + '8',
-      );
-
-  static ButtonModel nine(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '9',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '9',
-        expressionAction: (expression) => expression + '9',
-      );
-
-  static ButtonModel period(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: '.',
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) => displayString + '.',
-        expressionAction: (expression) => expression + '.',
-      );
-
-  static ButtonModel backspace(int positionX, int positionY) => ButtonModel(
-        positionX: positionX,
-        positionY: positionY,
-        icon: Icons.backspace,
-        backgroundColor: kNumberBackgroundColor,
-        displayAction: (displayString) =>
-            displayString.substring(0, displayString.length - 1),
-        expressionAction: (expression) =>
-            expression.substring(0, expression.length - 1),
-      ); */
 
   @override
   String toString() {
@@ -264,7 +56,7 @@ const listButtons = <ButtonModel>[
     backgroundColor: kLightPurpleBackbround,
     positionX: 0,
     positionY: 1,
-    buttonAction: ButtonAction.clearScreen,
+    buttonAction: ButtonAction.squareRoot,
   ),
   ButtonModel(
     icon: null,
@@ -273,7 +65,7 @@ const listButtons = <ButtonModel>[
     backgroundColor: kNumberBackgroundColor,
     positionX: 0,
     positionY: 2,
-    buttonAction: ButtonAction.clearScreen,
+    buttonAction: ButtonAction.seven,
   ),
   ButtonModel(
     icon: null,
@@ -282,7 +74,7 @@ const listButtons = <ButtonModel>[
     backgroundColor: kNumberBackgroundColor,
     positionX: 0,
     positionY: 3,
-    buttonAction: ButtonAction.clearScreen,
+    buttonAction: ButtonAction.four,
   ),
   ButtonModel(
     icon: null,
@@ -291,7 +83,7 @@ const listButtons = <ButtonModel>[
     backgroundColor: kNumberBackgroundColor,
     positionX: 0,
     positionY: 4,
-    buttonAction: ButtonAction.clearScreen,
+    buttonAction: ButtonAction.one,
   ),
   ButtonModel(
     icon: null,
@@ -300,7 +92,7 @@ const listButtons = <ButtonModel>[
     backgroundColor: kNumberBackgroundColor,
     positionX: 0,
     positionY: 5,
-    buttonAction: ButtonAction.clearScreen,
+    buttonAction: ButtonAction.point,
   ),
   ButtonModel(
     icon: null,
@@ -345,7 +137,7 @@ const listButtons = <ButtonModel>[
     backgroundColor: kNumberBackgroundColor,
     positionX: 1,
     positionY: 4,
-    buttonAction: ButtonAction.five,
+    buttonAction: ButtonAction.two,
   ),
   ButtonModel(
     icon: null,

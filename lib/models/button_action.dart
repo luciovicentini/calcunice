@@ -1,4 +1,5 @@
 enum ButtonAction {
+  none,
   addition,
   substraction,
   multiplication,

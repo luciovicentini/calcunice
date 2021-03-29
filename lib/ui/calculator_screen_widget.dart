@@ -47,7 +47,7 @@ class CalculatorScreenWidget extends StatelessWidget {
             child: Consumer(
               builder: (context, watch, child) {
                 return Text(
-                  watch(displayProvider).state,
+                  watch(displayProvider.state),
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 36.0,

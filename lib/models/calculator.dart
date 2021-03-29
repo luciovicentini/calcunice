@@ -5,11 +5,9 @@ class Calculator {
   static const precisionDecimalPoint = 11;
   static const String NEGATIVE_NUM_FLAG = 'm';
 
-  double result = 0.0;
+  const Calculator();
 
-  Calculator(String expression) {
-    result = processMathExpression(expression);
-  }
+  double getResult(String expression) => processMathExpression(expression);
 
   double processMathExpression(String expression) {
     if (_expressionHasParenthesis(expression)) {
