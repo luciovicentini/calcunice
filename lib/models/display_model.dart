@@ -69,7 +69,7 @@ class DisplayModel extends StateNotifier<String> {
         state += ')';
         break;
       case ButtonAction.percentage:
-        state += ' % ';
+        state += '% of ';
         break;
       case ButtonAction.plusMinusToggle:
         // TODO implement plusMinus logic;

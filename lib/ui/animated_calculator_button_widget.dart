@@ -1,7 +1,8 @@
 import 'package:calcunice/models/button_model.dart';
+import 'package:calcunice/models/display_model.dart';
 import 'package:flutter/material.dart';
 import 'package:calcunice/models/button_action.dart';
-import 'package:calcunice/models/calculator.dart';
+import 'package:calcunice/models/calculator_model.dart';
 import 'package:calcunice/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -42,15 +43,17 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
   }
 
   void onTap(read) {
-    final displayModel = read(displayProvider);
+    final DisplayModel displayModel = read(displayProv);
+    final CalculatorModel calculatorModel = read(calculatorProv);
     displayModel.onButtonTap(calculatorButton.buttonAction);
+    calculatorModel.onButtonTap(calculatorButton.buttonAction);
     if (calculatorButton.buttonAction == ButtonAction.equals &&
         displayModel.line.isNotEmpty) {
-      final calculatorModel = read(calculatorProvider);
       final String newExpression =
-          handleEquals(displayModel.line, calculatorModel);
+          '${displayModel.line} = ${calculatorModel.getResult()}';
       updateHistoricExpressionsList(read, newExpression);
       displayModel.clearLine();
+      calculatorModel.clearExpression();
     }
   }
 
@@ -58,11 +61,7 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
     final expressionList = read(historicCalculationsProvider).state;
     expressionList.add(newExpression);
     read(historicCalculationsProvider).state = expressionList;
-  }
-
-  String handleEquals(String expression, Calculator calculatorModel) {
-    final double result = calculatorModel.getResult(expression);
-    return '$expression = $result';
+    animatedListKey.currentState?.insertItem(0);
   }
 
   Widget _getButtonChild(IconData? icon, String? text, Color childColor) {

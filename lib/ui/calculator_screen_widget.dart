@@ -18,25 +18,34 @@ class CalculatorScreenWidget extends StatelessWidget {
               builder: (context, watch, child) {
                 final list =
                     watch(historicCalculationsProvider).state.reversed.toList();
-                return ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
-                      child: Text(
-                        list[index],
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: kLightResultScreenTextColor.withOpacity(0.8),
-                          wordSpacing: 8.0,
+                return AnimatedList(
+                  key: animatedListKey,
+                  physics: ClampingScrollPhysics(),
+                  reverse: true,
+                  initialItemCount: list.length,
+                  itemBuilder: (context, index, animation) {
+                    return AlignTransition(
+                      alignment: animation.drive(
+                        AlignmentTween(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
-                        maxLines: 1,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        child: Text(
+                          list[index],
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: kLightResultScreenTextColor.withOpacity(0.8),
+                            wordSpacing: 8.0,
+                          ),
+                          maxLines: 1,
+                        ),
                       ),
                     );
                   },
-                  physics: ClampingScrollPhysics(),
-                  reverse: true,
                 );
               },
             ),
@@ -47,7 +56,7 @@ class CalculatorScreenWidget extends StatelessWidget {
             child: Consumer(
               builder: (context, watch, child) {
                 return Text(
-                  watch(displayProvider.state),
+                  watch(displayProv.state),
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 36.0,

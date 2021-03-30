@@ -1,4 +1,4 @@
-import 'package:calcunice/models/calculator.dart';
+import 'package:calcunice/models/calculator_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -38,7 +38,7 @@ void main() {
 
 void testCalculator(String testExpression, double result) {
   test('-------- $testExpression should return $result --------', () {
-    final calcu = Calculator();
+    final calcu = CalculatorModel();
     expect(calcu.getResult(testExpression), result);
   });
 }

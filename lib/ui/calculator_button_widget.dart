@@ -1,4 +1,4 @@
-import 'package:calcunice/ui/ButtonAnimated.dart';
+import 'package:calcunice/ui/animated_calculator_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

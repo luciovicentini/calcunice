@@ -213,7 +213,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: '/',
+    text: '÷',
     childColor: kLightResultScreenTextColor,
     backgroundColor: kBasicOperationBackgroundLightColor,
     positionX: 3,

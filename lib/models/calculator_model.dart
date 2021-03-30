@@ -1,13 +1,18 @@
 import 'package:calcunice/models/math_operator.dart';
 import 'dart:math';
 
-class Calculator {
+import 'button_action.dart';
+
+class CalculatorModel {
   static const precisionDecimalPoint = 11;
   static const String NEGATIVE_NUM_FLAG = 'm';
 
-  const Calculator();
+  CalculatorModel();
 
-  double getResult(String expression) => processMathExpression(expression);
+  String expression = '';
+
+  double getResult([String? expression]) =>
+      processMathExpression(expression ?? this.expression);
 
   double processMathExpression(String expression) {
     if (_expressionHasParenthesis(expression)) {
@@ -272,5 +277,84 @@ class Calculator {
       }
     }
     return -1;
+  }
+
+  void onButtonTap(ButtonAction action) {
+    switch (action) {
+      case ButtonAction.equals:
+        break;
+      case ButtonAction.one:
+        expression += '1';
+        break;
+      case ButtonAction.two:
+        expression += '2';
+        break;
+      case ButtonAction.three:
+        expression += '3';
+        break;
+      case ButtonAction.four:
+        expression += '4';
+        break;
+      case ButtonAction.five:
+        expression += '5';
+        break;
+      case ButtonAction.six:
+        expression += '6';
+        break;
+      case ButtonAction.seven:
+        expression += '7';
+        break;
+      case ButtonAction.eight:
+        expression += '8';
+        break;
+      case ButtonAction.nine:
+        expression += '9';
+        break;
+      case ButtonAction.zero:
+        expression += '0';
+        break;
+      case ButtonAction.point:
+        expression += '.';
+        break;
+      case ButtonAction.backspace:
+        expression = expression.substring(0, expression.length - 1);
+        break;
+      case ButtonAction.addition:
+        expression += ' + ';
+        break;
+      case ButtonAction.substraction:
+        expression += ' - ';
+        break;
+      case ButtonAction.multiplication:
+        expression += ' x ';
+        break;
+      case ButtonAction.division:
+        expression += ' / ';
+        break;
+      case ButtonAction.squareRoot:
+        expression += ' √(';
+        break;
+      case ButtonAction.clearScreen:
+        clearExpression();
+        break;
+      case ButtonAction.openParenthesis:
+        expression += '(';
+        break;
+      case ButtonAction.closeParenthesis:
+        expression += ')';
+        break;
+      case ButtonAction.percentage:
+        expression += ' % ';
+        break;
+      case ButtonAction.plusMinusToggle:
+        // TODO implement plusMinus logic;
+        break;
+      default:
+        throw UnimplementedError('Button Action = $action not implemented yet');
+    }
+  }
+
+  void clearExpression() {
+    expression = '';
   }
 }
