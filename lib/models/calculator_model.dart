@@ -1,11 +1,12 @@
+import 'package:calcunice/models/basic_expression_util.dart';
+import 'package:calcunice/models/expression.dart';
 import 'package:calcunice/models/math_operator.dart';
 import 'dart:math';
 
 import 'button_action.dart';
 
-class CalculatorModel {
+class CalculatorModel extends Expression with BasicExpressionUtil {
   static const precisionDecimalPoint = 11;
-  static const String NEGATIVE_NUM_FLAG = 'm';
 
   CalculatorModel();
 
@@ -33,7 +34,7 @@ class CalculatorModel {
           expression, simpleExpression, simpleExpressionResult);
     }
     if (qtyMathOperators(expression) == 0) {
-      return double.parse(_parseNegativeNumFlag(expression));
+      return double.parse(parseNegativeNumFlag(expression));
     } else {
       return processMathExpression(expression);
     }
@@ -81,7 +82,7 @@ class CalculatorModel {
       String expression, String simpleExpression, double result) {
     var stringResult = result.toString();
     if (result < 0) {
-      stringResult = '$NEGATIVE_NUM_FLAG${result.abs()}';
+      stringResult = '$Expression.NEGATIVE_NUM_FLAG${result.abs()}';
     }
     return expression.replaceFirst(simpleExpression, stringResult);
   }
@@ -114,9 +115,9 @@ class CalculatorModel {
     final MathOperator mathOperator = mathOperatorMap[mathOperatorString]!;
     var leftSide = 0.0;
     if (mathOperator != MathOperator.squareRoot) {
-      leftSide = double.parse(_parseNegativeNumFlag(leftSideString));
+      leftSide = double.parse(parseNegativeNumFlag(leftSideString));
     }
-    final rightSide = double.parse(_parseNegativeNumFlag(rightSideString));
+    final rightSide = double.parse(parseNegativeNumFlag(rightSideString));
 
     switch (mathOperator) {
       case MathOperator.addition:
@@ -247,11 +248,6 @@ class CalculatorModel {
     return lastIndex;
   }
 
-  String _parseNegativeNumFlag(String number) =>
-      number.contains(NEGATIVE_NUM_FLAG)
-          ? number.replaceFirst(NEGATIVE_NUM_FLAG, '-')
-          : number;
-
   bool _expressionHasParenthesis(String expression) =>
       expression.contains('(') || expression.contains(')');
 
@@ -335,7 +331,7 @@ class CalculatorModel {
         expression += ' √(';
         break;
       case ButtonAction.clearScreen:
-        clearExpression();
+        clearLine();
         break;
       case ButtonAction.openParenthesis:
         expression += '(';
@@ -354,7 +350,9 @@ class CalculatorModel {
     }
   }
 
-  void clearExpression() {
+  void clearLine() {
     expression = '';
   }
+
+  void togglePlusMinus() {}
 }

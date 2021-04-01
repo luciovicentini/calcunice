@@ -53,7 +53,7 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
           '${displayModel.line} = ${calculatorModel.getResult()}';
       updateHistoricExpressionsList(read, newExpression);
       displayModel.clearLine();
-      calculatorModel.clearExpression();
+      calculatorModel.clearLine();
     }
   }
 
