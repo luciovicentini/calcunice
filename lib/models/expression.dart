@@ -1,5 +1,3 @@
-import 'package:calcunice/models/basic_expression_util.dart';
-
 import 'button_action.dart';
 
 abstract class Expression extends Object {
@@ -48,19 +46,19 @@ abstract class Expression extends Object {
         expression = expression.substring(0, expression.length - 1);
         break;
       case ButtonAction.addition:
-        expression += ' + ';
+        expression += '+';
         break;
       case ButtonAction.substraction:
-        expression += ' - ';
+        expression += '-';
         break;
       case ButtonAction.multiplication:
-        expression += ' x ';
+        expression += 'x';
         break;
       case ButtonAction.division:
-        expression += ' ÷ ';
+        expression += '÷';
         break;
       case ButtonAction.squareRoot:
-        expression += ' √(';
+        expression += '√(';
         break;
       case ButtonAction.clearScreen:
         clearLine();
@@ -72,7 +70,7 @@ abstract class Expression extends Object {
         expression += ')';
         break;
       case ButtonAction.percentage:
-        expression += '% of ';
+        expression += '%';
         break;
       case ButtonAction.plusMinusToggle:
         togglePlusMinus();

@@ -1,13 +1,15 @@
 import 'package:calcunice/models/basic_expression_util.dart';
 import 'package:calcunice/models/button_action.dart';
+import 'package:calcunice/models/display_state.dart';
 import 'package:calcunice/models/expression.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DisplayModel extends StateNotifier<String>
+class DisplayModel extends StateNotifier<DisplayState>
     with Expression, BasicExpressionUtil {
-  DisplayModel() : super('');
+  DisplayModel() : super(DisplayState.empty());
 
-  String get line => parseExpression(this.expression);
+  String getExpression() =>
+      state.when(empty: () => '', expression: (expression) => expression);
 
   void onButtonTap(ButtonAction action) {
     super.onButtonTap(action);
@@ -15,27 +17,42 @@ class DisplayModel extends StateNotifier<String>
   }
 
   void updateState() {
-    state = parseExpression(expression);
+    state = DisplayState.expression(_parseExpression());
   }
 
-  String parseExpression(String expression) {
-    return expression.replaceAll(Expression.NEGATIVE_NUM_FLAG, '-');
+  String _parseExpression() {
+    _insertSpacesBetweenOperators();
+    expression = expression.replaceAll(Expression.NEGATIVE_NUM_FLAG, '-');
+    return expression;
+  }
+
+  void _insertSpacesBetweenOperators() {
+    final charList = expression.split('');
+    for (var i = 0; i < charList.length; i++) {
+      if (spacingNeededOperators.contains(charList[i]) &&
+          charList[i - 1] != ' ') {
+        final expr1 = expression.substring(0, i);
+        final expr2 = expression.substring(i + 1);
+        expression = '$expr1 ${charList[i]} $expr2';
+      }
+    }
   }
 
   void togglePlusMinus() {
-    if (lastInsertedNumberHasMinus()) {
-      togglePlus();
+    if (_lastInsertedNumberHasMinus()) {
+      _togglePlus();
     } else {
-      toggleMinus();
+      _toggleMinus();
     }
     updateState();
   }
 
   void clearLine() {
-    state = '';
+    expression = '';
+    state = DisplayState.empty();
   }
 
-  bool lastInsertedNumberHasMinus() {
+  bool _lastInsertedNumberHasMinus() {
     if (isAllNumber(expression)) {
       return expression.contains(Expression.NEGATIVE_NUM_FLAG);
     } else {
@@ -45,7 +62,7 @@ class DisplayModel extends StateNotifier<String>
     }
   }
 
-  void toggleMinus() {
+  void _toggleMinus() {
     if (expression.length == 0) return;
     if (isAllNumber(expression)) {
       expression = '${Expression.NEGATIVE_NUM_FLAG}$expression';
@@ -57,7 +74,7 @@ class DisplayModel extends StateNotifier<String>
     }
   }
 
-  void togglePlus() {
+  void _togglePlus() {
     final index = expression.lastIndexOf(Expression.NEGATIVE_NUM_FLAG);
     final expression1 = expression.substring(0, index);
     final expression2 = expression.substring(index + 1);
@@ -70,7 +87,7 @@ class DisplayModel extends StateNotifier<String>
 
     for (var i = 0; i < charList.length; i++) {
       index = i;
-      if (isNumberExtended(charList[i])) {
+      if (!isNumberExtended(charList[i])) {
         break;
       }
     }

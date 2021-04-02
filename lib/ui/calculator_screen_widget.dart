@@ -56,7 +56,10 @@ class CalculatorScreenWidget extends StatelessWidget {
             child: Consumer(
               builder: (context, watch, child) {
                 return Text(
-                  watch(displayProv.state),
+                  watch(displayProv.state).maybeWhen(
+                    expression: (exp) => exp,
+                    orElse: () => '',
+                  ),
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 36.0,

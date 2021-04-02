@@ -15,6 +15,8 @@ mixin BasicExpressionUtil {
     '.',
   ];
 
+  final List<String> spacingNeededOperators = ['x', '÷', '-', '+'];
+
   List<String> getExtendedNumbers() {
     final List<String> list = [];
     list.addAll(numbersList);
