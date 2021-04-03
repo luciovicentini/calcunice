@@ -7,7 +7,8 @@ import 'models/calculator_model.dart';
 final displayProv =
     StateNotifierProvider<DisplayModel>((ref) => DisplayModel());
 
-final calculatorProv = Provider<CalculatorModel>((ref) => CalculatorModel());
+final calculatorProv = Provider.family
+    .autoDispose<CalculatorModel, String>((ref, exp) => CalculatorModel(exp));
 
 final historicCalculationsProvider = StateProvider<List<String>>((ref) {
   return [];

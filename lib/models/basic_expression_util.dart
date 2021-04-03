@@ -1,7 +1,7 @@
-import 'expression.dart';
-
 mixin BasicExpressionUtil {
-  final List<String> numbersList = [
+  static const String NEGATIVE_NUM_FLAG = 'm';
+
+  static const List<String> numbersPointList = [
     '0',
     '1',
     '2',
@@ -15,16 +15,21 @@ mixin BasicExpressionUtil {
     '.',
   ];
 
-  final List<String> spacingNeededOperators = ['x', '÷', '-', '+'];
+  static const List<String> basicOperators = [
+    'x',
+    '÷',
+    '-',
+    '+',
+  ];
 
   List<String> getExtendedNumbers() {
     final List<String> list = [];
-    list.addAll(numbersList);
-    list.add(Expression.NEGATIVE_NUM_FLAG);
+    list.addAll(numbersPointList);
+    list.add(BasicExpressionUtil.NEGATIVE_NUM_FLAG);
     return list;
   }
 
-  bool isNumberExtended(String char) => getExtendedNumbers().contains(char);
+  bool isNumberOrPointChar(String char) => getExtendedNumbers().contains(char);
 
   bool isAllNumber(String expression) {
     var isAllNumber = true;
@@ -38,7 +43,7 @@ mixin BasicExpressionUtil {
   }
 
   String parseNegativeNumFlag(String number) =>
-      number.contains(Expression.NEGATIVE_NUM_FLAG)
-          ? number.replaceFirst(Expression.NEGATIVE_NUM_FLAG, '-')
+      number.contains(BasicExpressionUtil.NEGATIVE_NUM_FLAG)
+          ? number.replaceFirst(BasicExpressionUtil.NEGATIVE_NUM_FLAG, '-')
           : number;
 }

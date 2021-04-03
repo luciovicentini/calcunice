@@ -38,7 +38,7 @@ void main() {
 
 void testCalculator(String testExpression, double result) {
   test('-------- $testExpression should return $result --------', () {
-    final calcu = CalculatorModel();
-    expect(calcu.getResult(testExpression), result);
+    final calcu = CalculatorModel(testExpression);
+    expect(calcu.getResult(), result);
   });
 }

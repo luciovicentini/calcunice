@@ -45,17 +45,17 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
 
   void onTap(read) {
     final DisplayModel displayModel = read(displayProv);
-    final CalculatorModel calculatorModel = read(calculatorProv);
     final DisplayState state = read(displayProv.state);
     displayModel.onButtonTap(calculatorButton.buttonAction);
-    calculatorModel.onButtonTap(calculatorButton.buttonAction);
+    // calculatorModel.onButtonTap(calculatorButton.buttonAction);
     if (calculatorButton.buttonAction == ButtonAction.equals &&
         state != DisplayState.empty()) {
+      final CalculatorModel calculatorModel =
+          read(calculatorProv(displayModel.expression));
       final String newExpression =
-          '${displayModel.getExpression()} = ${calculatorModel.getResult()}';
+          '${displayModel.getDisplay()} = ${calculatorModel.getResult()}';
       updateHistoricExpressionsList(read, newExpression);
       displayModel.clearLine();
-      calculatorModel.clearLine();
     }
   }
 
