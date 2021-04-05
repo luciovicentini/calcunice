@@ -24,6 +24,8 @@ class DisplayModel extends StateNotifier<DisplayState>
   void _handleButtonAction(ButtonAction action) {
     switch (action) {
       case ButtonAction.equals:
+        // TODO: Cerrar los parentesis abiertos?
+        // Si el ultimo caracter es una operacion elminar el mismo.
         break;
       case ButtonAction.one:
         expression += '1';
@@ -56,8 +58,9 @@ class DisplayModel extends StateNotifier<DisplayState>
         expression += '0';
         break;
       case ButtonAction.point:
-        // TODO: antes de agregar validar que el numero no tenga ya un punto decimal.
-        expression += '.';
+        if (!_isLastNumberDecimal()) {
+          expression += '.';
+        }
         break;
       case ButtonAction.backspace:
         expression = expression.substring(0, expression.length - 1);
@@ -96,9 +99,13 @@ class DisplayModel extends StateNotifier<DisplayState>
         expression += '(';
         break;
       case ButtonAction.closeParenthesis:
+        //TODO: validar que se haya abierto un parentesis antes de poder cerrarlo.
         expression += ')';
         break;
       case ButtonAction.percentage:
+        // TODO: validar el ultimo char ingresado:
+        //  if (es una operacion basica): reemplazar por este caracter.
+        // else: agregar el character correspondiente
         expression += '%';
         break;
       case ButtonAction.plusMinusToggle:
@@ -160,14 +167,22 @@ class DisplayModel extends StateNotifier<DisplayState>
     state = DisplayState.empty();
   }
 
-  bool _lastInsertedNumberHasMinus() {
+  bool _isLastNumberDecimal() {
+    final lastNumber = _getLastNumber();
+    return lastNumber.contains('.');
+  }
+
+  String _getLastNumber() {
     if (isAllNumber(expression)) {
-      return expression.contains(BasicExpressionUtil.NEGATIVE_NUM_FLAG);
-    } else {
-      final index = _getLastNumberFirstCharIndex(expression);
-      final String lastNumber = expression.substring(index);
-      return lastNumber.contains(BasicExpressionUtil.NEGATIVE_NUM_FLAG);
+      return expression;
     }
+    final index = _getLastNumberFirstCharIndex(expression);
+    return expression.substring(index);
+  }
+
+  bool _lastInsertedNumberHasMinus() {
+    final lastNumber = _getLastNumber();
+    return lastNumber.contains(BasicExpressionUtil.NEGATIVE_NUM_FLAG);
   }
 
   void _toggleMinus() {
