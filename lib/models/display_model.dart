@@ -1,8 +1,8 @@
-import 'dart:math';
-
 import 'package:calcunice/models/basic_expression_util.dart';
 import 'package:calcunice/models/button_action.dart';
 import 'package:calcunice/models/display_state.dart';
+import 'package:calcunice/models/math_operator.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DisplayModel extends StateNotifier<DisplayState>
@@ -59,6 +59,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         break;
       case ButtonAction.point:
         if (!_isLastNumberDecimal()) {
+          //TODO: agregar 0 adelante del . si es el primer char.
           expression += '.';
         }
         break;
@@ -66,28 +67,32 @@ class DisplayModel extends StateNotifier<DisplayState>
         expression = expression.substring(0, expression.length - 1);
         break;
       case ButtonAction.addition:
-        // TODO: validar el ultimo char ingresado:
-        //  if (es una operacion basica): reemplazar por este caracter.
-        // else: agregar el character correspondiente
-        expression += '+';
+        if (_isLastCharMathOperator(expression)) {
+          expression = _replaceLastMathOperator(expression, '+');
+        } else {
+          expression += '+';
+        }
         break;
       case ButtonAction.substraction:
-        // TODO: validar el ultimo char ingresado:
-        //  if (es una operacion basica): reemplazar por este caracter.
-        // else: agregar el character correspondiente
-        expression += '-';
+        if (_isLastCharMathOperator(expression)) {
+          expression = _replaceLastMathOperator(expression, '-');
+        } else {
+          expression += '-';
+        }
         break;
       case ButtonAction.multiplication:
-        // TODO: validar el ultimo char ingresado:
-        //  if (es una operacion basica): reemplazar por este caracter.
-        // else: agregar el character correspondiente
-        expression += 'x';
+        if (_isLastCharMathOperator(expression)) {
+          expression = _replaceLastMathOperator(expression, 'x');
+        } else {
+          expression += 'x';
+        }
         break;
       case ButtonAction.division:
-        // TODO: validar el ultimo char ingresado:
-        //  if (es una operacion basica): reemplazar por este caracter.
-        // else: agregar el character correspondiente
-        expression += '/';
+        if (_isLastCharMathOperator(expression)) {
+          expression = _replaceLastMathOperator(expression, '/');
+        } else {
+          expression += '/';
+        }
         break;
       case ButtonAction.squareRoot:
         expression += '√(';
@@ -99,14 +104,16 @@ class DisplayModel extends StateNotifier<DisplayState>
         expression += '(';
         break;
       case ButtonAction.closeParenthesis:
-        //TODO: validar que se haya abierto un parentesis antes de poder cerrarlo.
-        expression += ')';
+        if (_canCloseParenthesis()) {
+          expression += ')';
+        }
         break;
       case ButtonAction.percentage:
-        // TODO: validar el ultimo char ingresado:
-        //  if (es una operacion basica): reemplazar por este caracter.
-        // else: agregar el character correspondiente
-        expression += '%';
+        if (_isLastCharMathOperator(expression)) {
+          expression = _replaceLastMathOperator(expression, '%');
+        } else {
+          expression += '%';
+        }
         break;
       case ButtonAction.plusMinusToggle:
         togglePlusMinus();
@@ -134,15 +141,17 @@ class DisplayModel extends StateNotifier<DisplayState>
 
   String _insertSpacesBetweenOperators(String expression) {
     final charList = expression.split('');
+    var finalExpression = '';
     for (var i = 0; i < charList.length; i++) {
-      if (BasicExpressionUtil.basicOperators.contains(charList[i]) &&
-          charList[i - 1] != ' ') {
-        final expr1 = expression.substring(0, i);
-        final expr2 = expression.substring(i + 1);
-        expression = '$expr1 ${charList[i]} $expr2';
+      if (BasicExpressionUtil.basicOperators.contains(charList[i])) {
+        finalExpression += ' ';
+        finalExpression += charList[i];
+        finalExpression += ' ';
+      } else {
+        finalExpression += charList[i];
       }
     }
-    return expression;
+    return finalExpression;
   }
 
   String _replacePorcentage(String expression) {
@@ -217,5 +226,22 @@ class DisplayModel extends StateNotifier<DisplayState>
     }
 
     return expression.length - index;
+  }
+
+  bool _canCloseParenthesis() {
+    final openParenthesis = getAmountOfOpeningParenthesis(expression);
+    final closeParenthesis = getAmountOfClosingParenthesis(expression);
+    return openParenthesis > closeParenthesis;
+  }
+
+  bool _isLastCharMathOperator(String expression) {
+    final lastChar = expression.split('').last;
+    return mathOperatorMap.keys.contains(lastChar);
+  }
+
+  String _replaceLastMathOperator(String expression, String operator) {
+    expression = expression.substring(0, expression.length - 1);
+    expression += operator;
+    return expression;
   }
 }
