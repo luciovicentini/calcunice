@@ -17,7 +17,7 @@ mixin BasicExpressionUtil {
 
   static const List<String> basicOperators = [
     'x',
-    '÷',
+    '/',
     '-',
     '+',
   ];
@@ -40,6 +40,28 @@ mixin BasicExpressionUtil {
       }
     }
     return isAllNumber;
+  }
+
+  int getAmountOfOpeningParenthesis(String expression) {
+    var openParenthesis = 0;
+    final charList = expression.split('');
+    for (var i = 0; i < charList.length; i++) {
+      if (charList[i] == '(') {
+        openParenthesis++;
+      }
+    }
+    return openParenthesis;
+  }
+
+  int getAmountOfClosingParenthesis(String expression) {
+    var closeParenthesis = 0;
+    final charList = expression.split('');
+    for (var i = 0; i < charList.length; i++) {
+      if (charList[i] == ')') {
+        closeParenthesis++;
+      }
+    }
+    return closeParenthesis;
   }
 
   String parseNegativeNumFlag(String number) =>
