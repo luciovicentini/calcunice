@@ -2,7 +2,6 @@ import 'package:calcunice/models/basic_expression_util.dart';
 import 'package:calcunice/models/button_action.dart';
 import 'package:calcunice/models/display_state.dart';
 import 'package:calcunice/models/math_operator.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DisplayModel extends StateNotifier<DisplayState>
@@ -16,16 +15,20 @@ class DisplayModel extends StateNotifier<DisplayState>
 
   String expression = '';
 
-  void onButtonTap(ButtonAction action) {
-    _handleButtonAction(action);
+  bool onButtonTap(ButtonAction action) {
+    final shouldGetResult = _handleButtonAction(action);
     updateState();
+    return shouldGetResult;
   }
 
-  void _handleButtonAction(ButtonAction action) {
+  bool _handleButtonAction(ButtonAction action) {
+    bool shouldGetResult = false;
     switch (action) {
       case ButtonAction.equals:
-        // TODO: Cerrar los parentesis abiertos?
-        // Si el ultimo caracter es una operacion elminar el mismo.
+        if (!_isLastCharMathOperator(expression)) {
+          expression = _closeOpenedParenthesis(expression);
+          shouldGetResult = true;
+        }
         break;
       case ButtonAction.one:
         expression += '1';
@@ -59,7 +62,9 @@ class DisplayModel extends StateNotifier<DisplayState>
         break;
       case ButtonAction.point:
         if (!_isLastNumberDecimal()) {
-          //TODO: agregar 0 adelante del . si es el primer char.
+          if (_isFirstChar()) {
+            expression += '0';
+          }
           expression += '.';
         }
         break;
@@ -121,10 +126,25 @@ class DisplayModel extends StateNotifier<DisplayState>
       default:
         throw UnimplementedError('Button Action = $action not implemented yet');
     }
+    return shouldGetResult;
   }
 
   void updateState() {
     state = DisplayState.expression(_parseExpression(this.expression));
+  }
+
+  void togglePlusMinus() {
+    if (_lastInsertedNumberHasMinus()) {
+      _togglePlus();
+    } else {
+      _toggleMinus();
+    }
+    updateState();
+  }
+
+  void clearLine() {
+    expression = '';
+    state = DisplayState.empty();
   }
 
   String _parseExpression(String expression) {
@@ -160,20 +180,6 @@ class DisplayModel extends StateNotifier<DisplayState>
 
   String _replaceDivision(String expression) {
     return expression.replaceAll('/', '÷');
-  }
-
-  void togglePlusMinus() {
-    if (_lastInsertedNumberHasMinus()) {
-      _togglePlus();
-    } else {
-      _toggleMinus();
-    }
-    updateState();
-  }
-
-  void clearLine() {
-    expression = '';
-    state = DisplayState.empty();
   }
 
   bool _isLastNumberDecimal() {
@@ -239,9 +245,34 @@ class DisplayModel extends StateNotifier<DisplayState>
     return mathOperatorMap.keys.contains(lastChar);
   }
 
+  bool _isLastCharParenthesis(String expression) {
+    final lastChar = expression.split('').last;
+    return lastChar == '(' || lastChar == ')';
+  }
+
   String _replaceLastMathOperator(String expression, String operator) {
     expression = expression.substring(0, expression.length - 1);
     expression += operator;
+    return expression;
+  }
+
+  bool _isFirstChar() {
+    return expression.isEmpty || _isLastCharMathOperatorOrParenthesis();
+  }
+
+  bool _isLastCharMathOperatorOrParenthesis() {
+    return _isLastCharMathOperator(expression) ||
+        _isLastCharParenthesis(expression);
+  }
+
+  String _closeOpenedParenthesis(String expression) {
+    final openedParenthesis = getAmountOfOpeningParenthesis(expression);
+    final closedParenthesis = getAmountOfClosingParenthesis(expression);
+    if (openedParenthesis > closedParenthesis) {
+      for (var i = 0; i < openedParenthesis - closedParenthesis; i++) {
+        expression += ')';
+      }
+    }
     return expression;
   }
 }

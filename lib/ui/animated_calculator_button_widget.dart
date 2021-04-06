@@ -1,8 +1,6 @@
 import 'package:calcunice/models/button_model.dart';
 import 'package:calcunice/models/display_model.dart';
-import 'package:calcunice/models/display_state.dart';
 import 'package:flutter/material.dart';
-import 'package:calcunice/models/button_action.dart';
 import 'package:calcunice/models/calculator_model.dart';
 import 'package:calcunice/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,11 +43,8 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
 
   void onTap(read) {
     final DisplayModel displayModel = read(displayProv);
-    final DisplayState state = read(displayProv.state);
-    displayModel.onButtonTap(calculatorButton.buttonAction);
-    // calculatorModel.onButtonTap(calculatorButton.buttonAction);
-    if (calculatorButton.buttonAction == ButtonAction.equals &&
-        state != DisplayState.empty()) {
+    bool getResult = displayModel.onButtonTap(calculatorButton.buttonAction);
+    if (getResult) {
       final CalculatorModel calculatorModel =
           read(calculatorProv(displayModel.expression));
       final String newExpression =
