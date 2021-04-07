@@ -51,7 +51,7 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
       final String newExpression =
           '${displayModel.getDisplay()} = ${calculatorModel.getResult()}';
       updateHistoricExpressionsList(read, newExpression);
-      displayModel.clearLine();
+      displayModel.clearLine(true);
     }
   }
 

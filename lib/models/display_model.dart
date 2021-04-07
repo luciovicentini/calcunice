@@ -103,7 +103,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         expression += '√(';
         break;
       case ButtonAction.clearScreen:
-        clearLine();
+        clearLine(false);
         break;
       case ButtonAction.openParenthesis:
         expression += '(';
@@ -130,7 +130,11 @@ class DisplayModel extends StateNotifier<DisplayState>
   }
 
   void updateState() {
-    state = DisplayState.expression(_parseExpression(this.expression));
+    if (expression.isNotEmpty) {
+      state = DisplayState.expression(_parseExpression(this.expression));
+    } else {
+      state = DisplayState.empty();
+    }
   }
 
   void togglePlusMinus() {
@@ -142,9 +146,11 @@ class DisplayModel extends StateNotifier<DisplayState>
     updateState();
   }
 
-  void clearLine() {
+  void clearLine(bool shouldUpdateState) {
     expression = '';
-    state = DisplayState.empty();
+    if (shouldUpdateState) {
+      updateState();
+    }
   }
 
   String _parseExpression(String expression) {
