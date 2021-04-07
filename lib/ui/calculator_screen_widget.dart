@@ -16,8 +16,11 @@ class CalculatorScreenWidget extends StatelessWidget {
             flex: 9,
             child: Consumer(
               builder: (context, watch, child) {
-                final list =
-                    watch(historicCalculationsProvider).state.reversed.toList();
+                final List<String> list =
+                    watch(historicListModelProvider.state).when(
+                  empty: () => [],
+                  list: (expressions) => expressions.reversed.toList(),
+                );
                 return AnimatedList(
                   key: animatedListKey,
                   physics: ClampingScrollPhysics(),

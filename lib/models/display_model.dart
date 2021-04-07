@@ -1,6 +1,6 @@
 import 'package:calcunice/models/basic_expression_util.dart';
 import 'package:calcunice/models/button_action.dart';
-import 'package:calcunice/models/display_state.dart';
+import 'package:calcunice/states/display_state.dart';
 import 'package:calcunice/models/math_operator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -8,12 +8,12 @@ class DisplayModel extends StateNotifier<DisplayState>
     with BasicExpressionUtil {
   DisplayModel() : super(DisplayState.empty());
 
+  String expression = '';
+
   String getDisplay() => state.when(
         empty: () => '',
         expression: (expression) => expression,
       );
-
-  String expression = '';
 
   bool onButtonTap(ButtonAction action) {
     final shouldGetResult = _handleButtonAction(action);

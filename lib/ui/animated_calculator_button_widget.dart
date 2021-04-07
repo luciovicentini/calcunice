@@ -1,5 +1,6 @@
 import 'package:calcunice/models/button_model.dart';
 import 'package:calcunice/models/display_model.dart';
+import 'package:calcunice/models/historic_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:calcunice/models/calculator_model.dart';
 import 'package:calcunice/providers.dart';
@@ -55,9 +56,8 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
   }
 
   void updateHistoricExpressionsList(read, String newExpression) {
-    final expressionList = read(historicCalculationsProvider).state;
-    expressionList.add(newExpression);
-    read(historicCalculationsProvider).state = expressionList;
+    final HistoricListModel historicListModel = read(historicListModelProvider);
+    historicListModel.addNewMathExpression(newExpression);
     animatedListKey.currentState?.insertItem(0);
   }
 

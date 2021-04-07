@@ -12,6 +12,7 @@ class CalculatorModel with BasicExpressionUtil {
   double getResult() => processMathExpression(this.expression);
 
   double processMathExpression(String expression) {
+    //TODO: En case de ) ( sin operacion o parentesis y despues número, squareRoot,
     if (_expressionHasParenthesis(expression)) {
       final expressionParen = getExpressionBetweenParenthesis(expression);
       var expressionParentResult = 0.0;
@@ -130,6 +131,7 @@ class CalculatorModel with BasicExpressionUtil {
       case MathOperator.percentage:
         return (leftSide * rightSide) / 100;
       case MathOperator.squareRoot:
+        //TODO: Validate rightSide > 0 or throw error.
         return sqrt(rightSide);
       default:
         throw UnimplementedError(
