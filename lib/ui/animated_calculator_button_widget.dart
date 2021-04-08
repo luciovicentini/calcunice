@@ -1,3 +1,4 @@
+import 'package:calcunice/models/button_action.dart';
 import 'package:calcunice/models/button_model.dart';
 import 'package:calcunice/models/display_model.dart';
 import 'package:calcunice/models/historic_list_model.dart';
@@ -46,13 +47,23 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
     final DisplayModel displayModel = read(displayProv);
     bool getResult = displayModel.onButtonTap(calculatorButton.buttonAction);
     if (getResult) {
-      final CalculatorModel calculatorModel =
-          read(calculatorProv(displayModel.expression));
-      final String newExpression =
-          '${displayModel.getDisplay()} = ${calculatorModel.getResult()}';
-      updateHistoricExpressionsList(read, newExpression);
-      displayModel.clearLine(true);
+      handleResult(read, displayModel);
     }
+    if (calculatorButton.buttonAction == ButtonAction.clearHistoricList) {
+      final HistoricListModel historicListModel =
+          read(historicListModelProvider);
+      historicListModel.clearList();
+      animatedListKey = GlobalKey<AnimatedListState>();
+    }
+  }
+
+  void handleResult(read, displayModel) {
+    final CalculatorModel calculatorModel =
+        read(calculatorProv(displayModel.expression));
+    final newExpression =
+        '${displayModel.getDisplay()} = ${calculatorModel.getResult()}';
+    updateHistoricExpressionsList(read, newExpression);
+    displayModel.clearLine(true);
   }
 
   void updateHistoricExpressionsList(read, String newExpression) {

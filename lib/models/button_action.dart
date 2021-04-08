@@ -21,6 +21,7 @@ enum ButtonAction {
   openParenthesis,
   closeParenthesis,
   clearScreen,
+  clearHistoricList,
   backspace,
   equals,
 }

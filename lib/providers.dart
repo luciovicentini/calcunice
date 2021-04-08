@@ -1,3 +1,4 @@
+import 'package:calcunice/models/button_action.dart';
 import 'package:calcunice/models/display_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -14,4 +15,20 @@ final calculatorProv = Provider.family
 final historicListModelProvider =
     StateNotifierProvider<HistoricListModel>((ref) => HistoricListModel());
 
-final animatedListKey = GlobalKey<AnimatedListState>();
+final clearButtonTextProvider = Provider<String>((ref) {
+  final displayState = ref.watch(displayProv.state);
+  return displayState.when(
+    empty: () => 'CA',
+    expression: (_) => 'C',
+  );
+});
+
+final clearButtonActionProvider = Provider<ButtonAction>((ref) {
+  final displayState = ref.watch(displayProv.state);
+  return displayState.when(
+    empty: () => ButtonAction.clearHistoricList,
+    expression: (_) => ButtonAction.clearScreen,
+  );
+});
+
+var animatedListKey = GlobalKey<AnimatedListState>();

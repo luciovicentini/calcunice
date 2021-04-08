@@ -123,6 +123,8 @@ class DisplayModel extends StateNotifier<DisplayState>
       case ButtonAction.plusMinusToggle:
         togglePlusMinus();
         break;
+      case ButtonAction.clearHistoricList:
+        break;
       default:
         throw UnimplementedError('Button Action = $action not implemented yet');
     }
