@@ -31,4 +31,6 @@ final clearButtonActionProvider = Provider<ButtonAction>((ref) {
   );
 });
 
+final isLightProvider = StateProvider<bool>((ref) => true);
+
 var animatedListKey = GlobalKey<AnimatedListState>();
