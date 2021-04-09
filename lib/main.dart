@@ -1,5 +1,8 @@
+import 'package:calcunice/providers.dart';
 import 'package:calcunice/ui/calculator_widget.dart';
+import 'package:calcunice/ui/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,33 +10,44 @@ void main() {
   runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  // final backgroundColorStart = Colors.white;
-  // final backgroundColorEnd = /* Color.fromARGB(255, 210, 210, 210) */ ;
+class MyApp extends ConsumerWidget {
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,ScopedReader watch) {
+    final isLight = watch(isLightProvider).state;
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      themeMode: isLight ? ThemeMode.light : ThemeMode.dark,
+      home: const HomeWidget(),
+    );
+  }
+}
+
+
+class HomeWidget extends ConsumerWidget {
+  const HomeWidget();
+
+  @override
+  Widget build(BuildContext context,ScopedReader watch) {
+    final isLight = watch(isLightProvider).state;
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: isLight ? Themes.lightGradientColorsList : Themes.darkGradientColorsList,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [0.2, 1.0],
+          tileMode: TileMode.decal,
+        ),
       ),
-      home: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.white, Colors.grey[400] ?? Colors.grey],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.2, 1.0],
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: CalculatorWidget(),
-            ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: CalculatorWidget(),
           ),
         ),
       ),

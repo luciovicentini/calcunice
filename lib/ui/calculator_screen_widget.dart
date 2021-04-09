@@ -39,11 +39,7 @@ class CalculatorScreenWidget extends StatelessWidget {
                         child: Text(
                           list[index],
                           textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: kLightResultScreenTextColor.withOpacity(0.8),
-                            wordSpacing: 8.0,
-                          ),
+                          style: Theme.of(context).textTheme.bodyText1,
                           maxLines: 1,
                         ),
                       ),
@@ -64,11 +60,7 @@ class CalculatorScreenWidget extends StatelessWidget {
                     orElse: () => '',
                   ),
                   textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 36.0,
-                    fontWeight: FontWeight.bold,
-                    color: kLightResultScreenTextColor,
-                  ),
+                  style: Theme.of(context).textTheme.bodyText2,
                   maxLines: 1,
                 );
               },

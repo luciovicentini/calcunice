@@ -10,17 +10,12 @@ class DarkLightSwitchWidget extends HookWidget {
     final double width = 130;
     final double switchButtonWidth = width / 2;
     final duration = Duration(milliseconds: 200);
-    /*final controller = useAnimationController(duration: duration);
-    final colorTween =
-        ColorTween(begin: Colors.white, end: Colors.black).animate(controller); */
-
     final isLight = useProvider(isLightProvider).state;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: GestureDetector(
         onTap: () {
-          final isLight = context.read(isLightProvider).state;
           context.read(isLightProvider).state = !isLight;
         },
         child: Stack(
@@ -50,11 +45,12 @@ class DarkLightSwitchWidget extends HookWidget {
               left: 0,
               child: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
-                child: Text(
-                  'Dark',
-                  style: TextStyle(
-                    color: isLight ? Colors.white : Colors.black,
-                  ),
+                child: AnimatedDefaultTextStyle(
+                  child: Text('Dark'),
+                  style: isLight
+                      ? TextStyle(color: Colors.white)
+                      : TextStyle(color: Colors.black),
+                  duration: duration,
                 ),
               ),
             ),
@@ -62,11 +58,12 @@ class DarkLightSwitchWidget extends HookWidget {
               right: 0,
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0),
-                child: Text(
-                  'Light',
-                  style: TextStyle(
-                    color: isLight ? Colors.black : Colors.white,
-                  ),
+                child: AnimatedDefaultTextStyle(
+                  child: Text('Light'),
+                  style: isLight
+                      ? TextStyle(color: Colors.black)
+                      : TextStyle(color: Colors.white),
+                  duration: duration,
                 ),
               ),
             ),
