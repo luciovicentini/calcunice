@@ -15,8 +15,8 @@ class ButtonModel {
   final int positionY;
   final IconData? icon;
   final String? text;
-  final Color childColor;
-  final Color backgroundColor;
+  final Color? childColor;
+  final Color? backgroundColor;
   final ButtonAction buttonAction;
 
   const ButtonModel({

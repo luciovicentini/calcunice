@@ -22,19 +22,30 @@ class Themes {
     fontWeight: FontWeight.bold,
   );
 
+  static final baseKeyboardTextStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 26.0,
+  );
+
   static final darkTheme = ThemeData(
+    buttonColor: kDarkNumbersButtonBackgroundColor,
     textTheme: TextTheme(
+      // TextTheme for the list of historic expressions.
       bodyText1: baseTextStyleHistoricList.copyWith(
         color: kDarkHistoricListTextColor,
       ),
+      // TextTheme for the main display.
       bodyText2: baseTextStyleDisplay.copyWith(
         color: kDarkDisplayTextColor,
       ),
+      button: baseKeyboardTextStyle.copyWith(
+        color: kDarkButtonTextColor,
+      ),
     ),
-    brightness: Brightness.dark,
   );
 
   static final lightTheme = ThemeData(
+    buttonColor: kLightNumbersButtonBackgroundColor,
     textTheme: TextTheme(
       bodyText1: baseTextStyleHistoricList.copyWith(
         color: kLightHistoricListTextColor,
@@ -42,7 +53,9 @@ class Themes {
       bodyText2: baseTextStyleDisplay.copyWith(
         color: kLightDisplayTextColor,
       ),
+      button: baseKeyboardTextStyle.copyWith(
+        color: kLightButtonTextColor,
+      ),
     ),
-    brightness: Brightness.light,
   );
 }

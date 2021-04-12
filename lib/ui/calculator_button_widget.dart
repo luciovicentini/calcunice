@@ -18,9 +18,9 @@ class CalculatorButtonWidget extends HookWidget {
     final animationController = useAnimationController(
         duration: Duration(milliseconds: 100), initialValue: 4, upperBound: 4);
     animationController.addStatusListener((status) {
-      if (status == AnimationStatus.dismissed) {
-        animationController.forward();
-      }
+      // if (status == AnimationStatus.dismissed) {
+      //   ;
+      // }
     });
     final buttonHeight =
         keyboardLayout.calculateHeight(calculatorButton.stepsY);
@@ -30,7 +30,7 @@ class CalculatorButtonWidget extends HookWidget {
         buttonHeight: buttonHeight,
         buttonWidth: buttonWidth,
         calculatorButton: calculatorButton,
-        elevation: animationController,
+        animationController: animationController,
       ),
       top: (keyboardLayout.heightSize + keyboardLayout.heightMargin) *
           calculatorButton.positionY,

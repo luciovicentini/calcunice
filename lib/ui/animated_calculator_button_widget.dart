@@ -11,31 +11,35 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
   final double buttonHeight;
   final double buttonWidth;
   final ButtonModel calculatorButton;
-  final AnimationController elevation;
+  final AnimationController animationController;
 
-  const AnimatedCalculatorButtonWidget({
+  AnimatedCalculatorButtonWidget({
     required this.buttonHeight,
     required this.buttonWidth,
     required this.calculatorButton,
-    required this.elevation,
-  }) : super(listenable: elevation);
+    required this.animationController,
+  }) : super(listenable: animationController);
 
   @override
   Widget build(BuildContext context) {
     return PhysicalModel(
       color: Colors.black,
       borderRadius: BorderRadius.circular(26.0),
-      elevation: elevation.value,
-      child: InkWell(
-        onTapDown: (_) => elevation.reverse(),
+      elevation: animationController.value,
+      child: GestureDetector(
+        // splashColor: Colors.transparent,
+        // highlightColor: Colors.transparent,
+        onTapDown: (_) => animationController.reverse(),
+        onTapUp: (_) => animationController.forward(),
         onTap: () => onTap(context.read),
         child: Container(
           height: buttonHeight,
           width: buttonWidth,
           child: _getButtonChild(calculatorButton.icon, calculatorButton.text,
-              calculatorButton.childColor),
+              calculatorButton.childColor, context),
           decoration: BoxDecoration(
-            color: calculatorButton.backgroundColor,
+            color: calculatorButton.backgroundColor ??
+                Theme.of(context).buttonColor,
             borderRadius: BorderRadius.circular(26.0),
           ),
         ),
@@ -72,22 +76,24 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
     animatedListKey.currentState?.insertItem(0);
   }
 
-  Widget _getButtonChild(IconData? icon, String? text, Color childColor) {
+  Widget _getButtonChild(
+    IconData? icon,
+    String? text,
+    Color? childColor,
+    BuildContext context,
+  ) {
     if (icon != null) {
       return Icon(
         icon,
-        color: childColor,
+        color: childColor ?? Theme.of(context).textTheme.button!.color,
       );
     } else {
       return Center(
         child: Text(
           text!,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: childColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 30.0,
-          ),
+          style:
+              Theme.of(context).textTheme.button!.copyWith(color: childColor),
         ),
       );
     }
