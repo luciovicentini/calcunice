@@ -1,9 +1,10 @@
 import 'package:calcunice/ui/animated_calculator_button_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../models/keyboard_layout_calculator.dart';
-import '../models/button_model.dart';
+import 'package:calcunice/models/keyboard_layout_calculator.dart';
+import 'package:calcunice/models/button_model.dart';
 
 class CalculatorButtonWidget extends HookWidget {
   const CalculatorButtonWidget(this.calculatorButton, this.keyboardLayout,
@@ -16,26 +17,32 @@ class CalculatorButtonWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final animationController = useAnimationController(
-        duration: Duration(milliseconds: 100), initialValue: 4, upperBound: 4);
-    animationController.addStatusListener((status) {
-      // if (status == AnimationStatus.dismissed) {
-      //   ;
-      // }
-    });
+        duration: const Duration(milliseconds: 100),
+        initialValue: 4,
+        upperBound: 4);
     final buttonHeight =
         keyboardLayout.calculateHeight(calculatorButton.stepsY);
     final buttonWidth = keyboardLayout.calculateWidth(calculatorButton.stepsX);
     return Positioned(
+      top: (keyboardLayout.heightSize + keyboardLayout.heightMargin) *
+          calculatorButton.positionY,
+      left: (keyboardLayout.widthSize + keyboardLayout.widthMargin) *
+          calculatorButton.positionX,
       child: AnimatedCalculatorButtonWidget(
         buttonHeight: buttonHeight,
         buttonWidth: buttonWidth,
         calculatorButton: calculatorButton,
         animationController: animationController,
       ),
-      top: (keyboardLayout.heightSize + keyboardLayout.heightMargin) *
-          calculatorButton.positionY,
-      left: (keyboardLayout.widthSize + keyboardLayout.widthMargin) *
-          calculatorButton.positionX,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(
+        DiagnosticsProperty<ButtonModel>('calculatorButton', calculatorButton));
+    properties.add(DiagnosticsProperty<KeyboardLayoutCalculator>(
+        'keyboardLayout', keyboardLayout));
   }
 }

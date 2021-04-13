@@ -4,25 +4,23 @@ import 'package:calcunice/ui/calculator_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../constants.dart';
-import '../models/keyboard_layout_calculator.dart';
-import '../models/button_model.dart';
+import 'package:calcunice/constants.dart';
+import 'package:calcunice/models/keyboard_layout_calculator.dart';
+import 'package:calcunice/models/button_model.dart';
 
 class KeyboardLayoutWidget extends StatelessWidget {
   const KeyboardLayoutWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        var keyboardLayout =
-            KeyboardLayoutCalculator.calculateFromContainerSize(
-                constraints.maxWidth, constraints.maxHeight);
-        return Stack(
-          children: [
-            Consumer(
-              builder: (context, watch, child) {
-                return CalculatorButtonWidget(
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          final keyboardLayout =
+              KeyboardLayoutCalculator.calculateFromContainerSize(
+                  constraints.maxWidth, constraints.maxHeight);
+          return Stack(
+            children: [
+              Consumer(
+                builder: (context, watch, child) => CalculatorButtonWidget(
                     ButtonModel(
                       icon: null,
                       text: watch(clearButtonTextProvider),
@@ -32,22 +30,20 @@ class KeyboardLayoutWidget extends StatelessWidget {
                       positionY: 0,
                       buttonAction: watch(clearButtonActionProvider),
                     ),
-                    keyboardLayout);
-              },
-            ),
-            for (var button in listButtons)
-              CalculatorButtonWidget(button, keyboardLayout),
-          ],
-        );
-      },
-    );
-  }
+                    keyboardLayout),
+              ),
+              for (var button in listButtons)
+                CalculatorButtonWidget(button, keyboardLayout),
+            ],
+          );
+        },
+      );
 }
 
 const listButtons = <ButtonModel>[
   ButtonModel(
     icon: null,
-    text: "\u221a",
+    text: '\u221a',
     childColor: kLightNumbersButtonBackgroundColor,
     backgroundColor: kLightPurpleBackground,
     positionX: 0,
@@ -56,7 +52,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "7",
+    text: '7',
     childColor: null,
     backgroundColor: null,
     positionX: 0,
@@ -65,7 +61,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "4",
+    text: '4',
     childColor: null,
     backgroundColor: null,
     positionX: 0,
@@ -74,7 +70,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "1",
+    text: '1',
     childColor: null,
     backgroundColor: null,
     positionX: 0,
@@ -83,7 +79,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: ".",
+    text: '.',
     childColor: null,
     backgroundColor: null,
     positionX: 0,
@@ -92,7 +88,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "(",
+    text: '(',
     childColor: kLightNumbersButtonBackgroundColor,
     backgroundColor: kLightPurpleBackground,
     positionX: 1,
@@ -101,7 +97,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "%",
+    text: '%',
     childColor: kLightNumbersButtonBackgroundColor,
     backgroundColor: kLightPurpleBackground,
     positionX: 1,
@@ -110,7 +106,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "8",
+    text: '8',
     childColor: null,
     backgroundColor: null,
     positionX: 1,
@@ -119,7 +115,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "5",
+    text: '5',
     childColor: null,
     backgroundColor: null,
     positionX: 1,
@@ -128,7 +124,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "2",
+    text: '2',
     childColor: null,
     backgroundColor: null,
     positionX: 1,
@@ -137,7 +133,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "0",
+    text: '0',
     childColor: null,
     backgroundColor: null,
     positionX: 1,
@@ -146,7 +142,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: ")",
+    text: ')',
     childColor: kLightNumbersButtonBackgroundColor,
     backgroundColor: kLightPurpleBackground,
     positionX: 2,
@@ -155,7 +151,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "+/-",
+    text: '+/-',
     childColor: kLightNumbersButtonBackgroundColor,
     backgroundColor: kLightPurpleBackground,
     positionX: 2,
@@ -164,7 +160,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "9",
+    text: '9',
     childColor: null,
     backgroundColor: null,
     positionX: 2,
@@ -173,7 +169,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "6",
+    text: '6',
     childColor: null,
     backgroundColor: null,
     positionX: 2,
@@ -182,7 +178,7 @@ const listButtons = <ButtonModel>[
   ),
   ButtonModel(
     icon: null,
-    text: "3",
+    text: '3',
     childColor: null,
     backgroundColor: null,
     positionX: 2,

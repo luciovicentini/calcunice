@@ -1,62 +1,62 @@
 class KeyboardLayoutCalculator {
-  static const double ORIGINAL_BUTTON_WIDTH = 820;
-  static const double ORIGINAL_BUTTON_HEIGHT = 660;
-  static const double MIN_MARGIN = 8;
+  KeyboardLayoutCalculator({this.widthMargin = 0, this.heightMargin = 0});
 
-  static const BUTTONS_IN_ROW = 4;
-  static const TOTAL_ROWS = 6;
+  static const double originalButtonWidth = 820;
+  static const double originalButtonHeight = 660;
+  static const double minMargin = 8;
 
-  double widthSize = ORIGINAL_BUTTON_WIDTH;
+  static const buttonInRow = 4;
+  static const totalRows = 6;
+
+  double widthSize = originalButtonWidth;
   double widthMargin;
 
-  double heightSize = ORIGINAL_BUTTON_HEIGHT;
+  double heightSize = originalButtonHeight;
   double heightMargin;
 
   bool _recalculate = false;
 
-  KeyboardLayoutCalculator({this.widthMargin = 0, this.heightMargin = 0});
-
   static KeyboardLayoutCalculator calculateFromContainerSize(
       double maxWidth, double maxHeight) {
-    final keyboard = KeyboardLayoutCalculator();
-    keyboard._calculate(maxWidth, maxHeight);
+    final keyboard = KeyboardLayoutCalculator()
+      .._calculate(maxWidth, maxHeight);
     return keyboard;
   }
 
-  _calculate(double maxWidth, double maxHeight) {
+  void _calculate(double maxWidth, double maxHeight) {
     do {
       _calculateWidth(maxWidth);
       _calculateHeight(maxHeight);
     } while (_recalculate);
   }
 
-  _calculateWidth(double maxWidth) {
+  void _calculateWidth(double maxWidth) {
     _recalculate = false;
     widthSize = _calculateWidthSizeProp();
-    widthMargin = _calculateMargin(maxWidth, widthSize, BUTTONS_IN_ROW);
+    widthMargin = _calculateMargin(maxWidth, widthSize, buttonInRow);
 
-    double totalNeededWidth =
-        _calculateTotalNeeded(widthMargin, widthSize, BUTTONS_IN_ROW);
+    var totalNeededWidth =
+        _calculateTotalNeeded(widthMargin, widthSize, buttonInRow);
     while (totalNeededWidth > maxWidth) {
-      if (widthMargin > MIN_MARGIN) {
+      if (widthMargin > minMargin) {
         widthMargin -= 4;
       } else {
         widthSize--;
         _recalculate = true;
       }
       totalNeededWidth =
-          _calculateTotalNeeded(widthMargin, widthSize, BUTTONS_IN_ROW);
+          _calculateTotalNeeded(widthMargin, widthSize, buttonInRow);
     }
   }
 
-  _calculateHeight(double maxHeight) {
+  void _calculateHeight(double maxHeight) {
     _recalculate = false;
     heightSize = _calculateHeightSizeProp();
-    heightMargin = _calculateMargin(maxHeight, heightSize, TOTAL_ROWS);
+    heightMargin = _calculateMargin(maxHeight, heightSize, totalRows);
 
-    while (_calculateTotalNeeded(heightMargin, heightSize, TOTAL_ROWS) >
+    while (_calculateTotalNeeded(heightMargin, heightSize, totalRows) >
         maxHeight) {
-      if (heightMargin > MIN_MARGIN) {
+      if (heightMargin > minMargin) {
         heightMargin -= 4;
       } else {
         heightSize--;
@@ -65,46 +65,48 @@ class KeyboardLayoutCalculator {
     }
   }
 
-  double _calculateTotalNeeded(double margin, double buttonSize, int amount) {
-    return (margin * (amount - 1) + (buttonSize * amount));
-  }
+  double _calculateTotalNeeded(double margin, double buttonSize, int amount) =>
+      margin * (amount - 1) + (buttonSize * amount);
 
   double _calculateMargin(
       double containerSize, double buttonSize, int amountButtons) {
     var margin =
         (containerSize - (buttonSize * amountButtons)) / (amountButtons - 1);
 
-    if (margin < MIN_MARGIN) margin = MIN_MARGIN;
+    if (margin < minMargin) {
+      margin = minMargin;
+    }
 
     return margin;
   }
 
-  double _calculateWidthSizeProp() {
-    return ORIGINAL_BUTTON_WIDTH * heightSize / ORIGINAL_BUTTON_HEIGHT;
-  }
+  double _calculateWidthSizeProp() =>
+      originalButtonWidth * heightSize / originalButtonHeight;
 
-  double _calculateHeightSizeProp() {
-    return ORIGINAL_BUTTON_HEIGHT * widthSize / ORIGINAL_BUTTON_WIDTH;
-  }
+  double _calculateHeightSizeProp() =>
+      originalButtonHeight * widthSize / originalButtonWidth;
 
   @override
-  String toString() {
-    return 'KeyboardLayoutCalculation{widthSize: $widthSize, widthMargin: $widthMargin,'
-        ' heightSize: $heightSize, heightMargin: $heightMargin, \n'
-        ' totalWidth: ${_calculateTotalNeeded(widthMargin, widthSize, BUTTONS_IN_ROW)},'
-        ' totalHeight: ${_calculateTotalNeeded(heightMargin, heightSize, TOTAL_ROWS)}';
-  }
+  String toString() => 'KeyboardLayoutCalculation{widthSize: $widthSize, '
+      ' widthMargin: $widthMargin,'
+      ' heightSize: $heightSize, '
+      ' heightMargin: $heightMargin, \n'
+      ' totalWidth: ${_calculateTotalNeeded(widthMargin, widthSize, buttonInRow)},'
+      ' totalHeight: ${_calculateTotalNeeded(heightMargin, heightSize, totalRows)}';
 
   double calculateHeight(int stepsY) {
-    if (stepsY == 0) return 0;
-    double height =
-        (this.heightSize * stepsY) + (this.heightMargin * (stepsY - 1));
+    if (stepsY == 0) {
+      return 0;
+    }
+    final height = (heightSize * stepsY) + (heightMargin * (stepsY - 1));
     return height;
   }
 
   double calculateWidth(int stepsX) {
-    if (stepsX == 0) return 0;
-    final width = (this.widthSize * stepsX) + (this.widthMargin * (stepsX - 1));
+    if (stepsX == 0) {
+      return 0;
+    }
+    final width = (widthSize * stepsX) + (widthMargin * (stepsX - 1));
     return width;
   }
 }

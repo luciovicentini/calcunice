@@ -9,6 +9,18 @@ import 'package:calcunice/models/button_action.dart';
 import 'package:flutter/material.dart';
 
 class ButtonModel {
+  const ButtonModel({
+    required this.icon,
+    required this.text,
+    required this.childColor,
+    required this.backgroundColor,
+    required this.positionX,
+    required this.positionY,
+    required this.buttonAction,
+    this.stepsX = 1,
+    this.stepsY = 1,
+  });
+
   final int stepsX;
   final int stepsY;
   final int positionX;
@@ -19,20 +31,9 @@ class ButtonModel {
   final Color? backgroundColor;
   final ButtonAction buttonAction;
 
-  const ButtonModel({
-    this.stepsX = 1,
-    this.stepsY = 1,
-    required this.icon,
-    required this.text,
-    required this.childColor,
-    required this.backgroundColor,
-    required this.positionX,
-    required this.positionY,
-    required this.buttonAction,
-  });
-
   @override
-  String toString() {
-    return 'ButtonModel{stepsX: $stepsX, stepsY: $stepsY, positionX: $positionX, positionY: $positionY, icon: $icon, iconColor: $childColor, backgroundColor: $backgroundColor, action: $buttonAction}';
-  }
+  String toString() =>
+      'ButtonModel{stepsX: $stepsX, stepsY: $stepsY, positionX: $positionX,'
+      ' positionY: $positionY, icon: $icon, iconColor: $childColor,'
+      ' backgroundColor: $backgroundColor, action: $buttonAction}';
 }

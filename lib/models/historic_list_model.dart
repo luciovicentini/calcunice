@@ -1,8 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../states/historic_list_state.dart';
+import 'package:calcunice/states/historic_list_state.dart';
 
 class HistoricListModel extends StateNotifier<HistoricListState> {
-  HistoricListModel() : super(HistoricListState.empty());
+  HistoricListModel() : super(const HistoricListState.empty());
 
   void addNewMathExpression(String newExpression) {
     state.when(
@@ -15,6 +15,6 @@ class HistoricListModel extends StateNotifier<HistoricListState> {
   }
 
   void clearList() {
-    state = HistoricListState.empty();
+    state = const HistoricListState.empty();
   }
 }

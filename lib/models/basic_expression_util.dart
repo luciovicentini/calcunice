@@ -1,5 +1,5 @@
 mixin BasicExpressionUtil {
-  static const String NEGATIVE_NUM_FLAG = 'm';
+  static const String negativeNumberFlag = 'm';
 
   static const List<String> numbersPointList = [
     '0',
@@ -22,19 +22,15 @@ mixin BasicExpressionUtil {
     '+',
   ];
 
-  List<String> getExtendedNumbers() {
-    final List<String> list = [];
-    list.addAll(numbersPointList);
-    list.add(BasicExpressionUtil.NEGATIVE_NUM_FLAG);
-    return list;
-  }
+  List<String> getExtendedNumbers() =>
+      <String>[...numbersPointList, BasicExpressionUtil.negativeNumberFlag];
 
   bool isNumberOrPointChar(String char) => getExtendedNumbers().contains(char);
 
   bool isAllNumber(String expression) {
     var isAllNumber = true;
     final list = getExtendedNumbers();
-    for (var char in expression.split('')) {
+    for (final char in expression.split('')) {
       if (!list.contains(char)) {
         isAllNumber = false;
       }
@@ -65,7 +61,7 @@ mixin BasicExpressionUtil {
   }
 
   String parseNegativeNumFlag(String number) =>
-      number.contains(BasicExpressionUtil.NEGATIVE_NUM_FLAG)
-          ? number.replaceFirst(BasicExpressionUtil.NEGATIVE_NUM_FLAG, '-')
+      number.contains(BasicExpressionUtil.negativeNumberFlag)
+          ? number.replaceFirst(BasicExpressionUtil.negativeNumberFlag, '-')
           : number;
 }

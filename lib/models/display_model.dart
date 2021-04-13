@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DisplayModel extends StateNotifier<DisplayState>
     with BasicExpressionUtil {
-  DisplayModel() : super(DisplayState.empty());
+  DisplayModel() : super(const DisplayState.empty());
 
   String expression = '';
 
@@ -22,7 +22,7 @@ class DisplayModel extends StateNotifier<DisplayState>
   }
 
   bool _handleButtonAction(ButtonAction action) {
-    bool shouldGetResult = false;
+    var shouldGetResult = false;
     switch (action) {
       case ButtonAction.equals:
         if (!_isLastCharMathOperator(expression)) {
@@ -103,7 +103,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         expression += '√(';
         break;
       case ButtonAction.clearScreen:
-        clearLine(false);
+        clearLine(shouldUpdateState: false);
         break;
       case ButtonAction.openParenthesis:
         expression += '(';
@@ -125,6 +125,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         break;
       case ButtonAction.clearHistoricList:
         break;
+      // ignore: no_default_cases
       default:
         throw UnimplementedError('Button Action = $action not implemented yet');
     }
@@ -133,9 +134,9 @@ class DisplayModel extends StateNotifier<DisplayState>
 
   void updateState() {
     if (expression.isNotEmpty) {
-      state = DisplayState.expression(_parseExpression(this.expression));
+      state = DisplayState.expression(_parseExpression(expression));
     } else {
-      state = DisplayState.empty();
+      state = const DisplayState.empty();
     }
   }
 
@@ -148,7 +149,7 @@ class DisplayModel extends StateNotifier<DisplayState>
     updateState();
   }
 
-  void clearLine(bool shouldUpdateState) {
+  void clearLine({required bool shouldUpdateState}) {
     expression = '';
     if (shouldUpdateState) {
       updateState();
@@ -156,16 +157,16 @@ class DisplayModel extends StateNotifier<DisplayState>
   }
 
   String _parseExpression(String expression) {
-    expression = _insertSpacesBetweenOperators(expression);
-    expression = _replaceDivision(expression);
-    expression = _replacePorcentage(expression);
-    expression = _replaceNegativeNumberFlag(expression);
-    return expression;
+    var exp = expression;
+    exp = _insertSpacesBetweenOperators(exp);
+    exp = _replaceDivision(exp);
+    exp = _replacePorcentage(exp);
+    exp = _replaceNegativeNumberFlag(exp);
+    return exp;
   }
 
-  String _replaceNegativeNumberFlag(String expression) {
-    return expression.replaceAll(BasicExpressionUtil.NEGATIVE_NUM_FLAG, '-');
-  }
+  String _replaceNegativeNumberFlag(String expression) =>
+      expression.replaceAll(BasicExpressionUtil.negativeNumberFlag, '-');
 
   String _insertSpacesBetweenOperators(String expression) {
     final charList = expression.split('');
@@ -182,18 +183,12 @@ class DisplayModel extends StateNotifier<DisplayState>
     return finalExpression;
   }
 
-  String _replacePorcentage(String expression) {
-    return expression.replaceAll('%', ' % de ');
-  }
+  String _replacePorcentage(String expression) =>
+      expression.replaceAll('%', ' % de ');
 
-  String _replaceDivision(String expression) {
-    return expression.replaceAll('/', '÷');
-  }
+  String _replaceDivision(String expression) => expression.replaceAll('/', '÷');
 
-  bool _isLastNumberDecimal() {
-    final lastNumber = _getLastNumber();
-    return lastNumber.contains('.');
-  }
+  bool _isLastNumberDecimal() => _getLastNumber().contains('.');
 
   String _getLastNumber() {
     if (isAllNumber(expression)) {
@@ -203,26 +198,27 @@ class DisplayModel extends StateNotifier<DisplayState>
     return expression.substring(index);
   }
 
-  bool _lastInsertedNumberHasMinus() {
-    final lastNumber = _getLastNumber();
-    return lastNumber.contains(BasicExpressionUtil.NEGATIVE_NUM_FLAG);
-  }
+  bool _lastInsertedNumberHasMinus() =>
+      _getLastNumber().contains(BasicExpressionUtil.negativeNumberFlag);
 
   void _toggleMinus() {
-    if (expression.length == 0) return;
+    if (expression.isEmpty) {
+      return;
+    }
     if (isAllNumber(expression)) {
-      expression = '${BasicExpressionUtil.NEGATIVE_NUM_FLAG}$expression';
+      expression = '${BasicExpressionUtil.negativeNumberFlag}$expression';
     } else {
       final index = _getLastNumberFirstCharIndex(expression);
       final expression1 = expression.substring(0, index);
       final expression2 = expression.substring(index);
       expression =
-          '$expression1${BasicExpressionUtil.NEGATIVE_NUM_FLAG}$expression2';
+          '$expression1${BasicExpressionUtil.negativeNumberFlag}$expression2';
     }
   }
 
   void _togglePlus() {
-    final index = expression.lastIndexOf(BasicExpressionUtil.NEGATIVE_NUM_FLAG);
+    final index =
+        expression.lastIndexOf(BasicExpressionUtil.negativeNumberFlag);
     final expression1 = expression.substring(0, index);
     final expression2 = expression.substring(index + 1);
     expression = expression1 + expression2;
@@ -230,7 +226,7 @@ class DisplayModel extends StateNotifier<DisplayState>
 
   int _getLastNumberFirstCharIndex(String expression) {
     var index = -1;
-    final charList = expression.split("").reversed.toList();
+    final charList = expression.split('').reversed.toList();
 
     for (var i = 0; i < charList.length; i++) {
       index = i;
@@ -259,28 +255,27 @@ class DisplayModel extends StateNotifier<DisplayState>
   }
 
   String _replaceLastMathOperator(String expression, String operator) {
-    expression = expression.substring(0, expression.length - 1);
-    expression += operator;
+    var exp = expression;
+    exp = exp.substring(0, expression.length - 1);
+    exp += operator;
     return expression;
   }
 
-  bool _isFirstChar() {
-    return expression.isEmpty || _isLastCharMathOperatorOrParenthesis();
-  }
+  bool _isFirstChar() =>
+      expression.isEmpty || _isLastCharMathOperatorOrParenthesis();
 
-  bool _isLastCharMathOperatorOrParenthesis() {
-    return _isLastCharMathOperator(expression) ||
-        _isLastCharParenthesis(expression);
-  }
+  bool _isLastCharMathOperatorOrParenthesis() =>
+      _isLastCharMathOperator(expression) || _isLastCharParenthesis(expression);
 
   String _closeOpenedParenthesis(String expression) {
+    final exp = StringBuffer(expression);
     final openedParenthesis = getAmountOfOpeningParenthesis(expression);
     final closedParenthesis = getAmountOfClosingParenthesis(expression);
     if (openedParenthesis > closedParenthesis) {
       for (var i = 0; i < openedParenthesis - closedParenthesis; i++) {
-        expression += ')';
+        exp.write(')');
       }
     }
-    return expression;
+    return exp.toString();
   }
 }
