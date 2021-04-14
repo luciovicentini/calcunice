@@ -12,28 +12,29 @@ class CalculatorModel with BasicExpressionUtil {
   double getResult() => processMathExpression(expression);
 
   double processMathExpression(String expression) {
+    var tempExp = expression;
     // TODO(Lucho): En case de ) ( sin operacion o parentesis y despues número squareRoot
-    if (_expressionHasParenthesis(expression)) {
-      final expressionParen = getExpressionBetweenParenthesis(expression);
+    if (_expressionHasParenthesis(tempExp)) {
+      final expressionParen = getExpressionBetweenParenthesis(tempExp);
       var expressionParentResult = 0.0;
       if (qtyMathOperators(expressionParen) == 0) {
         expressionParentResult = double.parse(expressionParen);
       } else {
         expressionParentResult = processMathExpression(expressionParen);
       }
-      expression = replaceExpressionWithResult(
-          expression, '($expressionParen)', expressionParentResult);
+      tempExp = replaceExpressionWithResult(
+          tempExp, '($expressionParen)', expressionParentResult);
     } else {
-      final simpleExpression = findNextSingleExpression(expression);
+      final simpleExpression = findNextSingleExpression(tempExp);
       final simpleExpressionResult =
           resolveSimpleStringExpression(simpleExpression);
-      expression = replaceExpressionWithResult(
-          expression, simpleExpression, simpleExpressionResult);
+      tempExp = replaceExpressionWithResult(
+          tempExp, simpleExpression, simpleExpressionResult);
     }
-    if (qtyMathOperators(expression) == 0) {
-      return double.parse(parseNegativeNumFlag(expression));
+    if (qtyMathOperators(tempExp) == 0) {
+      return double.parse(parseNegativeNumFlag(tempExp));
     } else {
-      return processMathExpression(expression);
+      return processMathExpression(tempExp);
     }
   }
 

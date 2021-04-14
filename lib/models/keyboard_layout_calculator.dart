@@ -1,6 +1,13 @@
 class KeyboardLayoutCalculator {
   KeyboardLayoutCalculator({this.widthMargin = 0, this.heightMargin = 0});
 
+  KeyboardLayoutCalculator.calculateFromContainerSize(
+      double maxWidth, double maxHeight)
+      : widthMargin = 0,
+        heightMargin = 0 {
+    _calculate(maxWidth, maxHeight);
+  }
+
   static const double originalButtonWidth = 820;
   static const double originalButtonHeight = 660;
   static const double minMargin = 8;
@@ -15,13 +22,6 @@ class KeyboardLayoutCalculator {
   double heightMargin;
 
   bool _recalculate = false;
-
-  static KeyboardLayoutCalculator calculateFromContainerSize(
-      double maxWidth, double maxHeight) {
-    final keyboard = KeyboardLayoutCalculator()
-      .._calculate(maxWidth, maxHeight);
-    return keyboard;
-  }
 
   void _calculate(double maxWidth, double maxHeight) {
     do {
