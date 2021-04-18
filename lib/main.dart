@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:calcunice/providers.dart';
@@ -14,6 +15,10 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     final isLight = watch(isLightProvider).state;
     return MaterialApp(
       title: 'Flutter Demo',
