@@ -31,7 +31,8 @@ class CalculatorModel with BasicExpressionUtil {
       tempExp = replaceExpressionWithResult(
           tempExp, simpleExpression, simpleExpressionResult);
     }
-    if (qtyMathOperators(tempExp) == 0) {
+
+    if (tempExp.contains('e') || qtyMathOperators(tempExp) == 0) {
       return double.parse(parseNegativeNumFlag(tempExp));
     } else {
       return processMathExpression(tempExp);

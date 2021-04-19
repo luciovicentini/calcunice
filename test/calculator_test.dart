@@ -34,6 +34,10 @@ void main() {
   testCalculator('√(9x9)', 9);
   testCalculator('10+√(9x9)', 19);
   testCalculator('1+√(81+10-15+5x1)x2', 19);
+
+  testCalculator('123456789123456123123123123123123123123x1',
+      123456789123456123123123123123123123123.0);
+  testCalculator('123456789123456789 x 123 / 1535 + 50', 9892628705006686.0);
 }
 
 void testCalculator(String testExpression, double result) {
