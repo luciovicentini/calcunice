@@ -14,6 +14,23 @@ class HistoricListModel extends StateNotifier<HistoricListState> {
     );
   }
 
+  int getIndexOfExpression(String expression) => state.when(
+        empty: () => -1,
+        list: (expressions) => expressions.indexOf(expression),
+      );
+
+  void removeExpression(int index) {
+    if (index > 0) {
+      state = state.maybeWhen(
+        list: (expressions) {
+          expressions.removeAt(index);
+          return HistoricListState.list([...expressions]);
+        },
+        orElse: () => const HistoricListState.empty(),
+      );
+    }
+  }
+
   void clearList() {
     state = const HistoricListState.empty();
   }

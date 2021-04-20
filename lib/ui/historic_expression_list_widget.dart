@@ -1,4 +1,5 @@
 import 'package:calcunice/providers.dart';
+import 'package:calcunice/ui/historic_expression_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -25,15 +26,7 @@ class HistoricExpressionListWidget extends ConsumerWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: Text(
-            list[index],
-            textAlign: TextAlign.end,
-            style: Theme.of(context).textTheme.bodyText1,
-            maxLines: 1,
-          ),
-        ),
+        child: HistoricExpressionWidget(item: list[index]),
       ),
     );
   }
