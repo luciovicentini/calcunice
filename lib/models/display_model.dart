@@ -282,7 +282,10 @@ class DisplayModel extends StateNotifier<DisplayState>
   void useResultOfExpression(String expression) {
     final equalIndex = expression.lastIndexOf('=');
     final result = expression.substring(equalIndex + 2);
-    this.expression = result;
+    this.expression += _parseResultToExpression(result);
     updateState();
   }
+
+  String _parseResultToExpression(String result) =>
+      result.replaceAll('-', BasicExpressionUtil.negativeNumberFlag);
 }

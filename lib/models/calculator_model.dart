@@ -16,7 +16,7 @@ class CalculatorModel with BasicExpressionUtil {
     if (_isInteger(result)) {
       return result.toStringAsFixed(0);
     } else {
-      return result.toStringAsFixed(8);
+      return _dp(result, 8).toString();
     }
   }
 
@@ -298,4 +298,9 @@ class CalculatorModel with BasicExpressionUtil {
   }
 
   bool _isInteger(num value) => value is int || value == value.roundToDouble();
+
+  double _dp(double val, int places) {
+    final mod = pow(10.0, places);
+    return (val * mod).round().toDouble() / mod;
+  }
 }
