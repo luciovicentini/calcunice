@@ -13,8 +13,11 @@ class HistoricExpressionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: () {
+        onLongPress: () {
           showDialogFromSystem(item, context);
+        },
+        onTap: () {
+          _useResult(context, item);
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 2),
@@ -32,33 +35,51 @@ class HistoricExpressionWidget extends StatelessWidget {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('Expression Matematica'),
-          content: Text(item),
+          backgroundColor: Theme.of(context).backgroundColor,
+          content: Text(
+            item,
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  fontSize: 20,
+                ),
+          ),
           actions: [
             TextButton(
-                onPressed: () {
-                  dismissDialog(context);
-                },
-                child: const Text('OK')),
+              onPressed: () {
+                final model = context.read(historicListModelProvider);
+                final index = model.getIndexOfExpression(expression);
+                model.removeExpression(index);
+                animatedListKey.currentState!.removeItem(
+                  index,
+                  (context, animation) => Container(),
+                );
+                dismissDialog(context);
+              },
+              child: Icon(
+                Icons.delete_forever,
+                color: Theme.of(context).iconTheme.color,
+              ),
+            ),
             TextButton(
-                onPressed: () {
-                  final model = context.read(historicListModelProvider);
-                  final index = model.getIndexOfExpression(expression);
-                  model.removeExpression(index);
-                  animatedListKey.currentState!.removeItem(
-                    index,
-                    (context, animation) => Container(),
-                  );
-                  dismissDialog(context);
-                },
-                child: const Text('Borrar')),
-            TextButton(onPressed: () {}, child: const Text('Resultado')),
+              onPressed: () {
+                _useResult(context, expression);
+                dismissDialog(context);
+              },
+              child: Icon(
+                Icons.subdirectory_arrow_left_sharp,
+                color: Theme.of(context).iconTheme.color,
+              ),
+            ),
           ],
         ),
       );
 
   void dismissDialog(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  void _useResult(BuildContext context, String expression) {
+    final displayModel = context.read(displayProvider);
+    displayModel.useResultOfExpression(expression);
   }
 
   @override

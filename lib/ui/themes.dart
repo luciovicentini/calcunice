@@ -25,7 +25,9 @@ const baseKeyboardTextStyle = TextStyle(
 );
 
 final darkTheme = ThemeData(
+  backgroundColor: const Color.fromARGB(255, 37, 37, 37),
   buttonColor: kDarkNumbersButtonBackgroundColor,
+  iconTheme: const IconThemeData(color: kDarkButtonTextColor),
   textTheme: TextTheme(
     // TextTheme for the list of historic expressions.
     bodyText1: baseTextStyleHistoricList.copyWith(
@@ -42,6 +44,8 @@ final darkTheme = ThemeData(
 );
 
 final lightTheme = ThemeData(
+  backgroundColor: Colors.white,
+  iconTheme: const IconThemeData(color: kLightButtonTextColor),
   buttonColor: kLightNumbersButtonBackgroundColor,
   textTheme: TextTheme(
     bodyText1: baseTextStyleHistoricList.copyWith(

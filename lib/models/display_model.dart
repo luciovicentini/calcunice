@@ -278,4 +278,11 @@ class DisplayModel extends StateNotifier<DisplayState>
     }
     return exp.toString();
   }
+
+  void useResultOfExpression(String expression) {
+    final equalIndex = expression.lastIndexOf('=');
+    final result = expression.substring(equalIndex + 2);
+    this.expression = result;
+    updateState();
+  }
 }
