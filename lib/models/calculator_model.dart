@@ -11,6 +11,15 @@ class CalculatorModel with BasicExpressionUtil {
 
   double getResult() => processMathExpression(expression);
 
+  String getStringResult() {
+    final result = getResult();
+    if (_isInteger(result)) {
+      return result.toStringAsFixed(0);
+    } else {
+      return result.toStringAsFixed(8);
+    }
+  }
+
   double processMathExpression(String expression) {
     var tempExp = expression;
     // TODO(Lucho): En case de ) ( sin operacion o parentesis y despues número squareRoot
@@ -287,4 +296,6 @@ class CalculatorModel with BasicExpressionUtil {
     }
     return -1;
   }
+
+  bool _isInteger(num value) => value is int || value == value.roundToDouble();
 }
