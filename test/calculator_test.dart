@@ -38,6 +38,31 @@ void main() {
   testCalculator('123456789123456123123123123123123123123x1',
       123456789123456123123123123123123123123.0);
   testCalculator('123456789123456789 x 123 / 1535 + 50', 9892628705006686);
+
+  test('Testing multiplying parenthesis ()()', () {
+    final calcu = CalculatorModel('(3x3)(2+2)');
+    expect(calcu.getResult(), 36);
+  });
+
+  test('Testing multiplying parenthesis with negative number', () {
+    final calcu = CalculatorModel('(m4x4)(4+4)');
+    expect(calcu.getResult(), -128);
+  });
+
+  test('Testing multiplying parenthesis with number before', () {
+    const calcu = CalculatorModel('9(3+3)x9');
+    expect(calcu.getResult(), 486);
+  });
+
+  test('Testing multiplying parenthesis and square root', () {
+    const calcu = CalculatorModel('(3+3)√(9)');
+    expect(calcu.getResult(), 18);
+  });
+
+  test('Testing multiplying number and square root', () {
+    const calcu = CalculatorModel('9√(9)');
+    expect(calcu.getResult(), 27);
+  });
 }
 
 void testCalculator(String testExpression, double result) {

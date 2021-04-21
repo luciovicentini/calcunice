@@ -64,4 +64,8 @@ mixin BasicExpressionUtil {
       number.contains(BasicExpressionUtil.negativeNumberFlag)
           ? number.replaceFirst(BasicExpressionUtil.negativeNumberFlag, '-')
           : number;
+
+  bool isSquareRoot(String char) => char == '\u221a';
+
+  bool isClosingParenthesis(String char) => char == ')';
 }

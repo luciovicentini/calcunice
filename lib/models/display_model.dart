@@ -22,6 +22,7 @@ class DisplayModel extends StateNotifier<DisplayState>
   }
 
   bool _handleButtonAction(ButtonAction action) {
+    // TODO(Lucho): validar que el ultimo char sea un numero antes de agregar un operador basico
     var shouldGetResult = false;
     switch (action) {
       case ButtonAction.equals:
@@ -31,33 +32,43 @@ class DisplayModel extends StateNotifier<DisplayState>
         }
         break;
       case ButtonAction.one:
+        _addMultiplicationIfNeeded();
         expression += '1';
         break;
       case ButtonAction.two:
+        _addMultiplicationIfNeeded();
         expression += '2';
         break;
       case ButtonAction.three:
+        _addMultiplicationIfNeeded();
         expression += '3';
         break;
       case ButtonAction.four:
+        _addMultiplicationIfNeeded();
         expression += '4';
         break;
       case ButtonAction.five:
+        _addMultiplicationIfNeeded();
         expression += '5';
         break;
       case ButtonAction.six:
+        _addMultiplicationIfNeeded();
         expression += '6';
         break;
       case ButtonAction.seven:
+        _addMultiplicationIfNeeded();
         expression += '7';
         break;
       case ButtonAction.eight:
+        _addMultiplicationIfNeeded();
         expression += '8';
         break;
       case ButtonAction.nine:
+        _addMultiplicationIfNeeded();
         expression += '9';
         break;
       case ButtonAction.zero:
+        _addMultiplicationIfNeeded();
         expression += '0';
         break;
       case ButtonAction.point:
@@ -75,28 +86,36 @@ class DisplayModel extends StateNotifier<DisplayState>
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, '+');
         } else {
-          expression += '+';
+          if (!_lastCharIsOpenPar(expression)) {
+            expression += '+';
+          }
         }
         break;
       case ButtonAction.substraction:
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, '-');
         } else {
-          expression += '-';
+          if (!_lastCharIsOpenPar(expression)) {
+            expression += '-';
+          }
         }
         break;
       case ButtonAction.multiplication:
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, 'x');
         } else {
-          expression += 'x';
+          if (!_lastCharIsOpenPar(expression)) {
+            expression += 'x';
+          }
         }
         break;
       case ButtonAction.division:
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, '/');
         } else {
-          expression += '/';
+          if (!_lastCharIsOpenPar(expression)) {
+            expression += '/';
+          }
         }
         break;
       case ButtonAction.squareRoot:
@@ -109,15 +128,19 @@ class DisplayModel extends StateNotifier<DisplayState>
         expression += '(';
         break;
       case ButtonAction.closeParenthesis:
-        if (_canCloseParenthesis()) {
-          expression += ')';
+        if (!_lastCharIsOpenPar(expression)) {
+          if (_canCloseParenthesis()) {
+            expression += ')';
+          }
         }
         break;
       case ButtonAction.percentage:
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, '%');
         } else {
-          expression += '%';
+          if (!_lastCharIsOpenPar(expression)) {
+            expression += '%';
+          }
         }
         break;
       case ButtonAction.plusMinusToggle:
@@ -130,6 +153,12 @@ class DisplayModel extends StateNotifier<DisplayState>
         throw UnimplementedError('Button Action = $action not implemented yet');
     }
     return shouldGetResult;
+  }
+
+  void _addMultiplicationIfNeeded() {
+    if (_lastCharIsClosePar(expression)) {
+      expression += 'x';
+    }
   }
 
   void updateState() {
@@ -252,6 +281,16 @@ class DisplayModel extends StateNotifier<DisplayState>
   bool _isLastCharParenthesis(String expression) {
     final lastChar = expression.split('').last;
     return lastChar == '(' || lastChar == ')';
+  }
+
+  bool _lastCharIsOpenPar(String expression) {
+    final lastChar = expression.split('').last;
+    return lastChar == '(';
+  }
+
+  bool _lastCharIsClosePar(String expression) {
+    final lastChar = expression.split('').last;
+    return lastChar == ')';
   }
 
   String _replaceLastMathOperator(String expression, String operator) {

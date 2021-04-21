@@ -21,8 +21,8 @@ class CalculatorModel with BasicExpressionUtil {
   }
 
   double processMathExpression(String expression) {
-    var tempExp = expression;
-    // TODO(Lucho): En case de ) ( sin operacion o parentesis y despues número squareRoot
+    var tempExp = parseExpressionBeforeCalculations(expression);
+
     if (_expressionHasParenthesis(tempExp)) {
       final expressionParen = getExpressionBetweenParenthesis(tempExp);
       var expressionParentResult = 0.0;
@@ -46,6 +46,13 @@ class CalculatorModel with BasicExpressionUtil {
     } else {
       return processMathExpression(tempExp);
     }
+  }
+
+  String parseExpressionBeforeCalculations(String expression) {
+    var tempExp = _addMultiplicationBetweenParenthesis(expression);
+    tempExp = _addMultiplicationBetweenNumberAndParenthesis(tempExp);
+    tempExp = _addMultiplicationBeforeSquareRoot(tempExp);
+    return tempExp;
   }
 
   String getExpressionBetweenParenthesis(String expression) {
@@ -302,5 +309,45 @@ class CalculatorModel with BasicExpressionUtil {
   double _dp(double val, int places) {
     final mod = pow(10.0, places);
     return (val * mod).round().toDouble() / mod;
+  }
+
+  String _addMultiplicationBetweenParenthesis(String exp) {
+    final expList = exp.split('');
+    final expression = StringBuffer();
+    for (var i = 0; i < exp.length; i++) {
+      final char = expList[i];
+      expression.write(char);
+      if (char == ')' && i + 1 < exp.length && expList[i + 1] == '(') {
+        expression.write('x');
+      }
+    }
+
+    return expression.toString();
+  }
+
+  String _addMultiplicationBetweenNumberAndParenthesis(String exp) {
+    final expList = exp.split('');
+    final expression = StringBuffer(expList[0]);
+    for (var i = 1; i < exp.length; i++) {
+      if (expList[i] == '(' && getExtendedNumbers().contains(expList[i - 1])) {
+        expression.write('x');
+      }
+      expression.write(expList[i]);
+    }
+    return expression.toString();
+  }
+
+  String _addMultiplicationBeforeSquareRoot(String exp) {
+    final expList = exp.split('');
+    final expression = StringBuffer(expList[0]);
+    for (var i = 1; i < exp.length; i++) {
+      if (isSquareRoot(expList[i]) &&
+          (getExtendedNumbers().contains(expList[i - 1]) ||
+              isClosingParenthesis(expList[i - 1]))) {
+        expression.write('x');
+      }
+      expression.write(expList[i]);
+    }
+    return expression.toString();
   }
 }
