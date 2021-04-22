@@ -40,12 +40,12 @@ void main() {
   testCalculator('123456789123456789 x 123 / 1535 + 50', 9892628705006686);
 
   test('Testing multiplying parenthesis ()()', () {
-    final calcu = CalculatorModel('(3x3)(2+2)');
+    const calcu = CalculatorModel('(3x3)(2+2)');
     expect(calcu.getResult(), 36);
   });
 
   test('Testing multiplying parenthesis with negative number', () {
-    final calcu = CalculatorModel('(m4x4)(4+4)');
+    const calcu = CalculatorModel('(m4x4)(4+4)');
     expect(calcu.getResult(), -128);
   });
 
