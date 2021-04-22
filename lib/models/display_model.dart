@@ -274,21 +274,33 @@ class DisplayModel extends StateNotifier<DisplayState>
   }
 
   bool _isLastCharMathOperator(String expression) {
+    if (expression.isEmpty) {
+      return false;
+    }
     final lastChar = expression.split('').last;
     return mathOperatorMap.keys.contains(lastChar);
   }
 
   bool _isLastCharParenthesis(String expression) {
+    if (expression.isEmpty) {
+      return false;
+    }
     final lastChar = expression.split('').last;
     return lastChar == '(' || lastChar == ')';
   }
 
   bool _lastCharIsOpenPar(String expression) {
+    if (expression.isEmpty) {
+      return false;
+    }
     final lastChar = expression.split('').last;
     return lastChar == '(';
   }
 
   bool _lastCharIsClosePar(String expression) {
+    if (expression.isEmpty) {
+      return false;
+    }
     final lastChar = expression.split('').last;
     return lastChar == ')';
   }
