@@ -27,7 +27,8 @@ class CalculatorModel with BasicExpressionUtil {
       final expressionParen = getExpressionBetweenParenthesis(tempExp);
       var expressionParentResult = 0.0;
       if (qtyMathOperators(expressionParen) == 0) {
-        expressionParentResult = double.parse(expressionParen);
+        expressionParentResult =
+            double.parse(parseNegativeNumFlag(expressionParen));
       } else {
         expressionParentResult = processMathExpression(expressionParen);
       }

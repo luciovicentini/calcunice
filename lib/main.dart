@@ -23,6 +23,7 @@ class MyApp extends ConsumerWidget {
     ]);
     final isLight = watch(isLightProvider).state;
     return MaterialApp(
+      // debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: lightTheme,
       darkTheme: darkTheme,

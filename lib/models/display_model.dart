@@ -86,7 +86,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, '+');
         } else {
-          if (!_lastCharIsOpenPar(expression)) {
+          if (expression.isNotEmpty && !_lastCharIsOpenPar(expression)) {
             expression += '+';
           }
         }
@@ -95,7 +95,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, '-');
         } else {
-          if (!_lastCharIsOpenPar(expression)) {
+          if (expression.isNotEmpty && !_lastCharIsOpenPar(expression)) {
             expression += '-';
           }
         }
@@ -104,7 +104,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, 'x');
         } else {
-          if (!_lastCharIsOpenPar(expression)) {
+          if (expression.isNotEmpty && !_lastCharIsOpenPar(expression)) {
             expression += 'x';
           }
         }
@@ -113,7 +113,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         if (_isLastCharMathOperator(expression)) {
           expression = _replaceLastMathOperator(expression, '/');
         } else {
-          if (!_lastCharIsOpenPar(expression)) {
+          if (expression.isNotEmpty && !_lastCharIsOpenPar(expression)) {
             expression += '/';
           }
         }
@@ -330,10 +330,17 @@ class DisplayModel extends StateNotifier<DisplayState>
     return exp.toString();
   }
 
-  void useResultOfExpression(String expression) {
-    final equalIndex = expression.lastIndexOf('=');
-    final result = expression.substring(equalIndex + 2);
-    this.expression += _parseResultToExpression(result);
+  void useResultOfExpression(String selectedExpression) {
+    final equalIndex = selectedExpression.lastIndexOf('=');
+    final result = selectedExpression.substring(equalIndex + 2);
+    if (expression.isNotEmpty &&
+        !BasicExpressionUtil.numbersPointList
+            .contains(expression.split('').last)) {
+      expression += _parseResultToExpression(result);
+    } else {
+      expression = _parseResultToExpression(result);
+    }
+
     updateState();
   }
 

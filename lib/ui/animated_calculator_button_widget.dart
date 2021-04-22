@@ -26,8 +26,6 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
         borderRadius: BorderRadius.circular(26),
         elevation: animationController.value,
         child: GestureDetector(
-          // splashColor: Colors.transparent,
-          // highlightColor: Colors.transparent,
           onTapDown: (_) => animationController.reverse(),
           onTapUp: (_) => animationController.forward(),
           onTap: () => _onTap(context),
