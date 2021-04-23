@@ -45,7 +45,10 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
 
   void _onTap(BuildContext context) {
     final displayModel = context.read(displayProvider);
-    final getResult = displayModel.onButtonTap(calculatorButton.buttonAction);
+    final historicModel = context.read(historicListModelProvider);
+    final lastResult = historicModel.getLastExpressionResult();
+    final getResult =
+        displayModel.onButtonTap(calculatorButton.buttonAction, lastResult);
     if (getResult) {
       _handleResult(context, displayModel);
     }

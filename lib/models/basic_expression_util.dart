@@ -65,6 +65,15 @@ mixin BasicExpressionUtil {
           ? number.replaceFirst(BasicExpressionUtil.negativeNumberFlag, '-')
           : number;
 
+  String parseResultToExpression(String result) =>
+      result.replaceAll('-', BasicExpressionUtil.negativeNumberFlag);
+
+  String getResultFromExpression(String selectedExpression) {
+    final equalIndex = selectedExpression.lastIndexOf('=');
+    final result = selectedExpression.substring(equalIndex + 2);
+    return result;
+  }
+
   bool isSquareRoot(String char) => char == '\u221a';
 
   bool isClosingParenthesis(String char) => char == ')';

@@ -15,14 +15,13 @@ class DisplayModel extends StateNotifier<DisplayState>
         expression: (expression) => expression,
       );
 
-  bool onButtonTap(ButtonAction action) {
-    final shouldGetResult = _handleButtonAction(action);
+  bool onButtonTap(ButtonAction action, String? result) {
+    final shouldGetResult = _handleButtonAction(action, result);
     updateState();
     return shouldGetResult;
   }
 
-  bool _handleButtonAction(ButtonAction action) {
-    // TODO(Lucho): validar que el ultimo char sea un numero antes de agregar un operador basico
+  bool _handleButtonAction(ButtonAction action, String? result) {
     var shouldGetResult = false;
     switch (action) {
       case ButtonAction.equals:
@@ -88,6 +87,8 @@ class DisplayModel extends StateNotifier<DisplayState>
         } else {
           if (expression.isNotEmpty && !_lastCharIsOpenPar(expression)) {
             expression += '+';
+          } else if (expression.isEmpty && result != null) {
+            expression = '$result+';
           }
         }
         break;
@@ -97,6 +98,8 @@ class DisplayModel extends StateNotifier<DisplayState>
         } else {
           if (expression.isNotEmpty && !_lastCharIsOpenPar(expression)) {
             expression += '-';
+          } else if (expression.isEmpty && result != null) {
+            expression = '$result-';
           }
         }
         break;
@@ -106,6 +109,8 @@ class DisplayModel extends StateNotifier<DisplayState>
         } else {
           if (expression.isNotEmpty && !_lastCharIsOpenPar(expression)) {
             expression += 'x';
+          } else if (expression.isEmpty && result != null) {
+            expression = '${result}x';
           }
         }
         break;
@@ -115,11 +120,17 @@ class DisplayModel extends StateNotifier<DisplayState>
         } else {
           if (expression.isNotEmpty && !_lastCharIsOpenPar(expression)) {
             expression += '/';
+          } else if (expression.isEmpty && result != null) {
+            expression = '$result/';
           }
         }
         break;
       case ButtonAction.squareRoot:
-        expression += '√(';
+        if (expression.isEmpty && result != null) {
+          expression = '√($result';
+        } else {
+          expression += '√(';
+        }
         break;
       case ButtonAction.clearScreen:
         clearLine(shouldUpdateState: false);
@@ -148,7 +159,6 @@ class DisplayModel extends StateNotifier<DisplayState>
         break;
       case ButtonAction.clearHistoricList:
         break;
-      // ignore: no_default_cases
       default:
         throw UnimplementedError('Button Action = $action not implemented yet');
     }
@@ -331,19 +341,15 @@ class DisplayModel extends StateNotifier<DisplayState>
   }
 
   void useResultOfExpression(String selectedExpression) {
-    final equalIndex = selectedExpression.lastIndexOf('=');
-    final result = selectedExpression.substring(equalIndex + 2);
-    if (expression.isNotEmpty &&
-        !BasicExpressionUtil.numbersPointList
-            .contains(expression.split('').last)) {
-      expression += _parseResultToExpression(result);
-    } else {
-      expression = _parseResultToExpression(result);
+    final result = getResultFromExpression(selectedExpression);
+
+    if (expression.isEmpty) {
+      expression = parseResultToExpression(result);
+      updateState();
+    } else if (!BasicExpressionUtil.numbersPointList
+        .contains(expression.split('').last)) {
+      expression += parseResultToExpression(result);
+      updateState();
     }
-
-    updateState();
   }
-
-  String _parseResultToExpression(String result) =>
-      result.replaceAll('-', BasicExpressionUtil.negativeNumberFlag);
 }

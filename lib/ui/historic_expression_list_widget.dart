@@ -22,8 +22,8 @@ class HistoricExpressionListWidget extends ConsumerWidget {
       itemBuilder: (context, index, animation) => AlignTransition(
         alignment: animation.drive(
           AlignmentTween(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
           ),
         ),
         child: HistoricExpressionWidget(item: list[index]),
