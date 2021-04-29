@@ -1,9 +1,9 @@
 import 'package:calcunice/models/button_action.dart';
 import 'package:calcunice/models/button_model.dart';
 import 'package:calcunice/models/display_model.dart';
+import 'package:calcunice/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:calcunice/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AnimatedCalculatorButtonWidget extends AnimatedWidget {
@@ -28,6 +28,8 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
         child: GestureDetector(
           onTapDown: (_) => animationController.reverse(),
           onTapUp: (_) => animationController.forward(),
+          onLongPressEnd: (_) => animationController.forward(),
+          onLongPress: () => _onTap(context),
           onTap: () => _onTap(context),
           child: Container(
             height: buttonHeight,

@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:calcunice/extension_function.dart';
+
 class HistoricExpressionWidget extends StatelessWidget {
   const HistoricExpressionWidget({
     required this.item,
@@ -22,7 +24,7 @@ class HistoricExpressionWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 2),
           child: Text(
-            item,
+            item.getResult(),
             textAlign: TextAlign.start,
             style: Theme.of(context).textTheme.bodyText1,
             maxLines: 1,

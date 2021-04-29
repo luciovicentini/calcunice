@@ -4,6 +4,8 @@ import 'package:calcunice/states/display_state.dart';
 import 'package:calcunice/models/math_operator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:calcunice/extension_function.dart';
+
 class DisplayModel extends StateNotifier<DisplayState>
     with BasicExpressionUtil {
   DisplayModel() : super(const DisplayState.empty());
@@ -341,7 +343,7 @@ class DisplayModel extends StateNotifier<DisplayState>
   }
 
   void useResultOfExpression(String selectedExpression) {
-    final result = getResultFromExpression(selectedExpression);
+    final result = selectedExpression.getResult();
 
     if (expression.isEmpty) {
       expression = parseResultToExpression(result);

@@ -1,6 +1,7 @@
 import 'package:calcunice/models/basic_expression_util.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:calcunice/states/historic_list_state.dart';
+import 'package:calcunice/extension_function.dart';
 
 class HistoricListModel extends StateNotifier<HistoricListState>
     with BasicExpressionUtil {
@@ -35,10 +36,7 @@ class HistoricListModel extends StateNotifier<HistoricListState>
 
   String? getLastExpressionResult() => state.map(
         empty: (_) => null,
-        list: (state) {
-          final lastExpression = state.expressions.last;
-          return getResultFromExpression(lastExpression);
-        },
+        list: (state) => state.expressions.last.getResult(),
       );
 
   void clearList() {
