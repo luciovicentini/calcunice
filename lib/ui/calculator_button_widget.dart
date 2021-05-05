@@ -40,9 +40,10 @@ class CalculatorButtonWidget extends HookWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-        DiagnosticsProperty<ButtonModel>('calculatorButton', calculatorButton));
-    properties.add(DiagnosticsProperty<KeyboardLayoutCalculator>(
-        'keyboardLayout', keyboardLayout));
+    properties
+      ..add(DiagnosticsProperty<ButtonModel>(
+          'calculatorButton', calculatorButton))
+      ..add(DiagnosticsProperty<KeyboardLayoutCalculator>(
+          'keyboardLayout', keyboardLayout));
   }
 }

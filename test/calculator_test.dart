@@ -1,5 +1,7 @@
+import 'package:calcunice/common/calculator_exception.dart';
 import 'package:calcunice/models/calculator_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:matcher/matcher.dart';
 
 void main() {
   testCalculator('1+2+3+4', 10);
@@ -35,8 +37,6 @@ void main() {
   testCalculator('10+√(9x9)', 19);
   testCalculator('1+√(81+10-15+5x1)x2', 19);
 
-  testCalculator('123456789123456123123123123123123123123x1',
-      123456789123456123123123123123123123123.0);
   testCalculator('123456789123456789 x 123 / 1535 + 50', 9892628705006686);
 
   test('Testing multiplying parenthesis ()()', () {
@@ -62,6 +62,23 @@ void main() {
   test('Testing multiplying number and square root', () {
     const calcu = CalculatorModel('9√(9)');
     expect(calcu.getResult(), 27);
+  });
+
+  test('Testing exponential notation', () {
+    const calcu = CalculatorModel('5.015e+6 + 1');
+    expect(calcu.getResult(), 5015001);
+  });
+
+  test('Testing exponential notation double numbers', () {
+    const calcu = CalculatorModel('5.015e+6 + 5.015e+6');
+    expect(calcu.getResult(), 5015000 + 5015000);
+  });
+
+  test('Testing exponential notation big number should throws exception', () {
+    const calcu = CalculatorModel('5.015e+20 x 5.015e+20');
+    expect(() {
+      calcu.getResult();
+    }, throwsA(const TypeMatcher<CalculatorException>()));
   });
 }
 

@@ -1,3 +1,4 @@
+import 'package:calcunice/common/calculator_exception.dart';
 import 'package:calcunice/models/button_action.dart';
 import 'package:calcunice/models/button_model.dart';
 import 'package:calcunice/models/display_model.dart';
@@ -28,8 +29,7 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
         child: GestureDetector(
           onTapDown: (_) => animationController.reverse(),
           onTapUp: (_) => animationController.forward(),
-          onLongPressEnd: (_) => animationController.forward(),
-          onLongPress: () => _onTap(context),
+          // onLongPress: () => _onTap(context),
           onTap: () => _onTap(context),
           child: Container(
             height: buttonHeight,
@@ -63,10 +63,14 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
   void _handleResult(BuildContext context, DisplayModel displayModel) {
     final calculatorModel =
         context.read(calculatorProv(displayModel.expression));
-    final newExpression =
-        '${displayModel.getDisplay()} = ${calculatorModel.getStringResult()}';
-    _updateHistoricExpressionsList(context, newExpression);
-    displayModel.clearLine(shouldUpdateState: true);
+    try {
+      final stringResult = calculatorModel.getStringResult();
+      final newExpression = '${displayModel.getDisplay()} = $stringResult';
+      _updateHistoricExpressionsList(context, newExpression);
+      displayModel.clearLine(shouldUpdateState: true);
+    } on CalculatorException catch (e) {
+      print(e.cause);
+    }
   }
 
   void _updateHistoricExpressionsList(
@@ -103,11 +107,12 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DoubleProperty('buttonHeight', buttonHeight));
-    properties.add(DoubleProperty('buttonWidth', buttonWidth));
-    properties.add(
-        DiagnosticsProperty<ButtonModel>('calculatorButton', calculatorButton));
-    properties.add(DiagnosticsProperty<AnimationController>(
-        'animationController', animationController));
+    properties
+      ..add(DoubleProperty('buttonHeight', buttonHeight))
+      ..add(DoubleProperty('buttonWidth', buttonWidth))
+      ..add(DiagnosticsProperty<ButtonModel>(
+          'calculatorButton', calculatorButton))
+      ..add(DiagnosticsProperty<AnimationController>(
+          'animationController', animationController));
   }
 }

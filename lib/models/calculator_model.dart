@@ -1,15 +1,17 @@
 import 'dart:math';
+import 'package:calcunice/common/calculator_exception.dart';
 import 'package:calcunice/models/basic_expression_util.dart';
 import 'package:calcunice/models/math_operator.dart';
+import 'package:decimal/decimal.dart';
 
 class CalculatorModel with BasicExpressionUtil {
-  const CalculatorModel(this.expression);
+  const CalculatorModel(this.expressionField);
 
   static const precisionDecimalPoint = 11;
 
-  final String expression;
+  final String expressionField;
 
-  double getResult() => processMathExpression(expression);
+  double getResult() => processMathExpression(expressionField);
 
   String getStringResult() {
     final result = getResult();
@@ -32,18 +34,19 @@ class CalculatorModel with BasicExpressionUtil {
       } else {
         expressionParentResult = processMathExpression(expressionParen);
       }
-      tempExp = replaceExpressionWithResult(
+      tempExp = _replaceExpressionWithResult(
           tempExp, '($expressionParen)', expressionParentResult);
     } else {
       final simpleExpression = findNextSingleExpression(tempExp);
       final simpleExpressionResult =
           resolveSimpleStringExpression(simpleExpression);
-      tempExp = replaceExpressionWithResult(
+      tempExp = _replaceExpressionWithResult(
           tempExp, simpleExpression, simpleExpressionResult);
     }
 
-    if (tempExp.contains('e') || qtyMathOperators(tempExp) == 0) {
-      return double.parse(parseNegativeNumFlag(tempExp));
+    if (qtyMathOperators(tempExp) == 0) {
+      final result = double.parse(parseNegativeNumFlag(tempExp));
+      return result;
     } else {
       return processMathExpression(tempExp);
     }
@@ -51,6 +54,7 @@ class CalculatorModel with BasicExpressionUtil {
 
   String parseExpressionBeforeCalculations(String expression) {
     var tempExp = _addMultiplicationBetweenParenthesis(expression);
+    tempExp = _parseScientificNotation(tempExp);
     tempExp = _addMultiplicationBetweenNumberAndParenthesis(tempExp);
     tempExp = _addMultiplicationBeforeSquareRoot(tempExp);
     return tempExp;
@@ -77,7 +81,7 @@ class CalculatorModel with BasicExpressionUtil {
         expression.substring(0, expression.indexOf(mathOperator)).split('');
     if (_checkHasMathOperator(allLeftSideChars)) {
       return allLeftSideChars
-          .sublist(getIndexOfLastMathOperator(allLeftSideChars) + 1)
+          .sublist(_getIndexOfLastMathOperator(allLeftSideChars) + 1)
           .join();
     }
     return allLeftSideChars.join();
@@ -94,14 +98,19 @@ class CalculatorModel with BasicExpressionUtil {
     return allRightSideChars.join();
   }
 
-  String replaceExpressionWithResult(
+  String _replaceExpressionWithResult(
       String expression, String simpleExpression, double result) {
     var stringResult = result.toString();
     if (result < 0) {
       stringResult = '${BasicExpressionUtil.negativeNumberFlag}${result.abs()}';
     }
-    return expression.replaceFirst(simpleExpression, stringResult);
+    return _replaceExpressionWithStringResult(
+        expression, simpleExpression, stringResult);
   }
+
+  String _replaceExpressionWithStringResult(
+          String exp, String simpleExp, String result) =>
+      exp.replaceFirst(simpleExp, result);
 
   int qtyMathOperators(String expression) {
     var qtyMathOperators = 0;
@@ -159,20 +168,20 @@ class CalculatorModel with BasicExpressionUtil {
     }
   }
 
-  MathOperator _getNextMathOperator(String expression) {
-    final sqrtOperator = _getSqrtOperator(expression);
+  MathOperator _getNextMathOperator(String exp) {
+    final sqrtOperator = _getSqrtOperator(exp);
     if (sqrtOperator != null) {
       return sqrtOperator;
     }
-    final percentageOperator = _getPercentajeOperator(expression);
+    final percentageOperator = _getPercentajeOperator(exp);
     if (percentageOperator != null) {
       return percentageOperator;
     }
-    final multiDivOperator = _getNextMultiOrDivOperator(expression);
+    final multiDivOperator = _getNextMultiOrDivOperator(exp);
     if (multiDivOperator != null) {
       return multiDivOperator;
     }
-    final addSubOperator = _getNextAddOrSubOperator(expression);
+    final addSubOperator = _getNextAddOrSubOperator(exp);
     if (addSubOperator != null) {
       return addSubOperator;
     }
@@ -262,7 +271,7 @@ class CalculatorModel with BasicExpressionUtil {
     return false;
   }
 
-  int getIndexOfLastMathOperator(List<String> listChar) {
+  int _getIndexOfLastMathOperator(List<String> listChar) {
     var lastIndex = 0;
     for (final mathOperator in mathOperatorMap.keys) {
       if (listChar.contains(mathOperator)) {
@@ -350,5 +359,34 @@ class CalculatorModel with BasicExpressionUtil {
       expression.write(expList[i]);
     }
     return expression.toString();
+  }
+
+  bool _hasScientificNotation(String exp) => exp.contains('e');
+
+  String _parseScientificNotation(String exp) {
+    var expression = exp;
+    while (_hasScientificNotation(expression)) {
+      final eExpression = _getNextScientificNotationExpression(expression);
+      final eDoubleExpression = Decimal.parse(eExpression).toDouble();
+      if ('$eDoubleExpression'.contains('e')) {
+        throw CalculatorException(
+            '$eDoubleExpression is too big or too small for calculations');
+      }
+      expression = _replaceExpressionWithResult(
+          expression, eExpression, eDoubleExpression);
+    }
+    return expression;
+  }
+
+  String _getNextScientificNotationExpression(String expression) {
+    final eIndex = expression.indexOf('e');
+    final leftEIndex =
+        _getIndexOfLastMathOperator(expression.substring(0, eIndex).split(''));
+    final rightEIndex =
+        _getIndexOfNextMathOperator(expression.substring(eIndex + 2).split(''));
+    return expression
+        .substring(leftEIndex != 0 ? leftEIndex + 1 : 0,
+            rightEIndex == -1 ? expression.length : eIndex + rightEIndex + 1)
+        .trim();
   }
 }
