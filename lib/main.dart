@@ -1,9 +1,10 @@
+import 'package:calcunice/ui/horizontal_calculator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:calcunice/providers.dart';
-import 'package:calcunice/ui/calculator_widget.dart';
+import 'package:calcunice/ui/vertical_calculator_widget.dart';
 import 'package:calcunice/ui/themes.dart';
 
 void main() {
@@ -29,6 +30,19 @@ class MyApp extends ConsumerWidget {
       darkTheme: darkTheme,
       themeMode: isLight ? ThemeMode.light : ThemeMode.dark,
       home: const _HomeWidget(),
+      // home: ScreenSize(),
+    );
+  }
+}
+
+class ScreenSize extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+    return Scaffold(
+      body: Center(
+        child: Text('Height: ${media.height} - Width: ${media.width}'),
+      ),
     );
   }
 }
@@ -38,6 +52,7 @@ class _HomeWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final size = MediaQuery.of(context).size;
     final isLight = watch(isLightProvider).state;
     return Container(
       decoration: BoxDecoration(
@@ -49,12 +64,14 @@ class _HomeWidget extends ConsumerWidget {
           tileMode: TileMode.decal,
         ),
       ),
-      child: const Scaffold(
+      child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: CalculatorWidget(),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: size.height > size.width
+                ? const VerticalCalculatorWidget()
+                : const HorizontalCalculatorWidget(),
           ),
         ),
       ),
