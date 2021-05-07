@@ -3,6 +3,7 @@ import 'package:calcunice/models/button_action.dart';
 import 'package:calcunice/models/button_model.dart';
 import 'package:calcunice/models/display_model.dart';
 import 'package:calcunice/providers.dart';
+import 'package:calcunice/ui/dialog_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -69,8 +70,22 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
       _updateHistoricExpressionsList(context, newExpression);
       displayModel.clearLine(shouldUpdateState: true);
     } on CalculatorException catch (e) {
-      print(e.cause);
+      showErrorDialog(e, context);
     }
+  }
+
+  void showErrorDialog(CalculatorException e, BuildContext context) {
+    DialogWidget.showDialogFromSystem(
+        'Error: ${e.cause}',
+        [
+          TextButton(
+            onPressed: () {
+              DialogWidget.dismissDialog(context);
+            },
+            child: const Text('OK'),
+          )
+        ],
+        context);
   }
 
   void _updateHistoricExpressionsList(
