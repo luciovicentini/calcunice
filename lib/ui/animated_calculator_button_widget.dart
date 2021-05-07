@@ -24,7 +24,7 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
   @override
   Widget build(BuildContext context) => PhysicalModel(
         color: Colors.black,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(16),
         elevation: animationController.value,
         child: GestureDetector(
           onTapDown: (_) => animationController.reverse(),
@@ -37,7 +37,7 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
             decoration: BoxDecoration(
               color: calculatorButton.backgroundColor ??
                   Theme.of(context).buttonColor,
-              borderRadius: BorderRadius.circular(26),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: _getButtonChild(calculatorButton.icon, calculatorButton.text,
                 calculatorButton.childColor, context),

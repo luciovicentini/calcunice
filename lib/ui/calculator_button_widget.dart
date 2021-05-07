@@ -24,9 +24,9 @@ class CalculatorButtonWidget extends HookWidget {
         keyboardLayout.calculateHeight(calculatorButton.stepsY);
     final buttonWidth = keyboardLayout.calculateWidth(calculatorButton.stepsX);
     return Positioned(
-      top: (keyboardLayout.heightSize + keyboardLayout.heightMargin) *
+      top: (keyboardLayout.heightSize + KeyboardLayoutCalculator.margin) *
           calculatorButton.positionY,
-      left: (keyboardLayout.widthSize + keyboardLayout.widthMargin) *
+      left: (keyboardLayout.widthSize + KeyboardLayoutCalculator.margin) *
           calculatorButton.positionX,
       child: AnimatedCalculatorButtonWidget(
         buttonHeight: buttonHeight,

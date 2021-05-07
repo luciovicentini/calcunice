@@ -10,7 +10,7 @@ const kLightPurpleBackground = Color.fromRGBO(115, 87, 128, 1);
 const kLightClearButtonBackground = Color.fromRGBO(208, 157, 227, 1);
 
 // Colors for texts
-const kLightHistoricListTextColor = Color.fromRGBO(208, 208, 208, 1);
+// const kLightHistoricListTextColor = Color.fromRGBO(208, 208, 208, 1);
 const kDarkHistoricListTextColor = Color.fromRGBO(170, 170, 170, 1);
 const kLightDisplayTextColor = Color.fromRGBO(70, 70, 70, 1);
 const kDarkDisplayTextColor = Colors.white;

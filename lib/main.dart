@@ -35,18 +35,6 @@ class MyApp extends ConsumerWidget {
   }
 }
 
-class ScreenSize extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final media = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Center(
-        child: Text('Height: ${media.height} - Width: ${media.width}'),
-      ),
-    );
-  }
-}
-
 class _HomeWidget extends ConsumerWidget {
   const _HomeWidget();
 

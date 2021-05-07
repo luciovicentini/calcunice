@@ -49,7 +49,7 @@ final lightTheme = ThemeData(
   buttonColor: kLightNumbersButtonBackgroundColor,
   textTheme: TextTheme(
     bodyText1: baseTextStyleHistoricList.copyWith(
-      color: kLightHistoricListTextColor,
+      color: kDarkHistoricListTextColor,
     ),
     bodyText2: baseTextStyleDisplay.copyWith(
       color: kLightDisplayTextColor,
