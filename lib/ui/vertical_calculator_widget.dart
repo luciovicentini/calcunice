@@ -9,7 +9,7 @@ class VerticalCalculatorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: const [
           SizedBox(
             height: 35,

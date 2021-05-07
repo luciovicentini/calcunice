@@ -1,9 +1,8 @@
 import 'package:calcunice/providers.dart';
+import 'package:extended_text/extended_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:calcunice/extension_function.dart';
 
 class HistoricExpressionWidget extends StatelessWidget {
   const HistoricExpressionWidget({
@@ -23,12 +22,25 @@ class HistoricExpressionWidget extends StatelessWidget {
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 2),
-          child: Text(
-            item.getResult(),
-            textAlign: TextAlign.start,
+          child: ExtendedText(
+            item,
             style: Theme.of(context).textTheme.bodyText1,
-            maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            overflowWidget: TextOverflowWidget(
+              position: TextOverflowPosition.start,
+              align: TextOverflowAlign.left,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '\u2026 ',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       );

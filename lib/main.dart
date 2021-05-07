@@ -8,8 +8,8 @@ import 'package:calcunice/ui/vertical_calculator_widget.dart';
 import 'package:calcunice/ui/themes.dart';
 
 void main() {
-  // TODO(Lucho): utilizar resultado de la ultima expression (en caso de que haya) si el usuario presiona algun boton de operacion matematica
   // TODO(Lucho): resolver que se muestre primero el resultado de la expression y luego la expression en el listado de calculos.
+  // TODO(Lucho): El texto del display principal tiene que estar a la derecha
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -24,13 +24,12 @@ class MyApp extends ConsumerWidget {
     ]);
     final isLight = watch(isLightProvider).state;
     return MaterialApp(
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: isLight ? ThemeMode.light : ThemeMode.dark,
       home: const _HomeWidget(),
-      // home: ScreenSize(),
     );
   }
 }

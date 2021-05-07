@@ -14,8 +14,6 @@ class KeyboardLayoutWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => LayoutBuilder(
         builder: (context, constraints) {
-          print(
-              'MaxWidth: ${constraints.maxWidth} - MaxHeight: ${constraints.maxHeight}');
           final keyboardLayout =
               KeyboardLayoutCalculator.calculateFromContainerSize(
                   constraints.maxWidth, constraints.maxHeight);

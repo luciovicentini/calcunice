@@ -14,6 +14,7 @@ class HistoricExpressionListWidget extends ConsumerWidget {
       empty: () => <String>[],
       list: (expressions) => expressions.reversed.toList(),
     );
+
     return AnimatedList(
       key: animatedListKey,
       physics: const ClampingScrollPhysics(),
