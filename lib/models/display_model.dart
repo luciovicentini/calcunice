@@ -27,7 +27,7 @@ class DisplayModel extends StateNotifier<DisplayState>
     var shouldGetResult = false;
     switch (action) {
       case ButtonAction.equals:
-        if (!_isLastCharMathOperator(expression)) {
+        if (_isValidExpression()) {
           expression = _closeOpenedParenthesis(expression);
           shouldGetResult = true;
         }
@@ -167,6 +167,13 @@ class DisplayModel extends StateNotifier<DisplayState>
     return shouldGetResult;
   }
 
+  bool _isValidExpression() {
+    var isValidExpression = false;
+    isValidExpression = !_isLastCharMathOperator(expression);
+    isValidExpression = _hasAtLeastOneOperator(expression);
+    return isValidExpression;
+  }
+
   void _addMultiplicationIfNeeded() {
     if (_lastCharIsClosePar(expression)) {
       expression += 'x';
@@ -291,6 +298,19 @@ class DisplayModel extends StateNotifier<DisplayState>
     }
     final lastChar = expression.split('').last;
     return mathOperatorMap.keys.contains(lastChar);
+  }
+
+  bool _hasAtLeastOneOperator(String expression) {
+    if (expression.isEmpty) {
+      return false;
+    }
+    final listExp = expression.split('');
+    for (final char in listExp) {
+      if (mathOperatorMap.keys.contains(char)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   bool _isLastCharParenthesis(String expression) {
