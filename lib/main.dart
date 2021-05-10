@@ -1,11 +1,11 @@
+import 'package:calcunice/providers.dart';
 import 'package:calcunice/ui/horizontal_calculator_widget.dart';
+import 'package:calcunice/ui/themes.dart';
+import 'package:calcunice/ui/vertical_calculator_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:calcunice/providers.dart';
-import 'package:calcunice/ui/vertical_calculator_widget.dart';
-import 'package:calcunice/ui/themes.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));

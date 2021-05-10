@@ -1,4 +1,4 @@
-import 'package:calcunice/ui/dark_light_switch_widget.dart';
+import 'package:calcunice/ui/custom_top_bar_widget.dart';
 import 'package:calcunice/ui/expression_display_widget.dart';
 import 'package:calcunice/ui/historic_expression_list_widget.dart';
 import 'package:calcunice/ui/keyboard_layout_widget.dart';
@@ -13,7 +13,7 @@ class VerticalCalculatorWidget extends StatelessWidget {
         children: const [
           SizedBox(
             height: 35,
-            child: DarkLightSwitchWidget(),
+            child: CustomTopBarWidget(),
           ),
           SizedBox(height: 8),
           Flexible(
