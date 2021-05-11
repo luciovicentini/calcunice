@@ -135,7 +135,7 @@ class DisplayModel extends StateNotifier<DisplayState>
         }
         break;
       case ButtonAction.clearScreen:
-        clearLine(shouldUpdateState: false);
+        expression = '';
         break;
       case ButtonAction.openParenthesis:
         expression += '(';
@@ -197,11 +197,9 @@ class DisplayModel extends StateNotifier<DisplayState>
     updateState();
   }
 
-  void clearLine({required bool shouldUpdateState}) {
-    expression = '';
-    if (shouldUpdateState) {
-      updateState();
-    }
+  void setResult(String result) {
+    expression = result;
+    updateState();
   }
 
   String _parseExpression(String expression) {

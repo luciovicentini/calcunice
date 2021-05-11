@@ -6,11 +6,14 @@ class CustomTopBarWidget extends StatelessWidget {
   const CustomTopBarWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          DarkLightSwitchWidget(),
-          AppInfoButton(),
-        ],
+  Widget build(BuildContext context) => SizedBox(
+        height: 35,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            DarkLightSwitchWidget(),
+            AppInfoButton(),
+          ],
+        ),
       );
 }

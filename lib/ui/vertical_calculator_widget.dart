@@ -11,19 +11,13 @@ class VerticalCalculatorWidget extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: const [
-          SizedBox(
-            height: 35,
-            child: CustomTopBarWidget(),
-          ),
+          CustomTopBarWidget(),
           SizedBox(height: 8),
           Flexible(
             flex: 9,
             child: HistoricExpressionListWidget(),
           ),
-          SizedBox(
-            height: 50,
-            child: ExpressionDisplayWidget(),
-          ),
+          ExpressionDisplayWidget(),
           SizedBox(height: 8),
           Flexible(
             flex: 20,

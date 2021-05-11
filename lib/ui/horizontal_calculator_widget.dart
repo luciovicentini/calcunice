@@ -16,10 +16,7 @@ class HorizontalCalculatorWidget extends StatelessWidget {
             child: CustomTopBarWidget(),
           ),
           const SizedBox(height: 8),
-          const SizedBox(
-            height: 50,
-            child: ExpressionDisplayWidget(),
-          ),
+          const ExpressionDisplayWidget(),
           Expanded(
             child: Row(
               children: const [

@@ -22,6 +22,10 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
   final ButtonModel calculatorButton;
   final AnimationController animationController;
 
+  void _handleDragEnd(DragEndDetails details) {
+    animationController.forward();
+  }
+
   @override
   Widget build(BuildContext context) => PhysicalModel(
         color: Colors.black,
@@ -30,7 +34,8 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
         child: GestureDetector(
           onTapDown: (_) => animationController.reverse(),
           onTapUp: (_) => animationController.forward(),
-          // onLongPress: () => _onTap(context),
+          onHorizontalDragEnd: _handleDragEnd,
+          onVerticalDragEnd: _handleDragEnd,
           onTap: () => _onTap(context),
           child: Container(
             height: buttonHeight,
@@ -68,7 +73,7 @@ class AnimatedCalculatorButtonWidget extends AnimatedWidget {
       final stringResult = calculatorModel.getStringResult();
       final newExpression = '${displayModel.getDisplay()} = $stringResult';
       _updateHistoricExpressionsList(context, newExpression);
-      displayModel.clearLine(shouldUpdateState: true);
+      displayModel.setResult(stringResult);
     } on CalculatorException catch (e) {
       showErrorDialog(e, context);
     }
