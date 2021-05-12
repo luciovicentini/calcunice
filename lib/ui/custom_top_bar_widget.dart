@@ -10,9 +10,9 @@ class CustomTopBarWidget extends StatelessWidget {
         height: 35,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             DarkLightSwitchWidget(),
-            AppInfoButton(),
+            const AppInfoButton(),
           ],
         ),
       );
