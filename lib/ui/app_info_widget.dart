@@ -49,7 +49,10 @@ class _AppInfoButtonState extends State<AppInfoButton> {
               const SizedBox(
                 height: 8,
               ),
-              const Text('Calcunice is a nice design basic calculator.'),
+              Text(
+                'Calcunice is a nice design basic calculator.',
+                style: Theme.of(context).textTheme.headline5,
+              ),
             ],
           );
         },

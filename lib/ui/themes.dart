@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:calcunice/constants.dart';
+import 'package:flutter/material.dart';
 
 const List<Color> lightGradientColorsList = [
   Colors.white,
@@ -26,10 +26,12 @@ const baseKeyboardTextStyle = TextStyle(
 
 final darkTheme = ThemeData(
   backgroundColor: const Color.fromARGB(255, 37, 37, 37),
+  accentColor: Colors.white,
   buttonColor: kDarkNumbersButtonBackgroundColor,
   dialogBackgroundColor: kDarkNumbersButtonBackgroundColor,
   scaffoldBackgroundColor: kDarkNumbersButtonBackgroundColor,
   iconTheme: const IconThemeData(color: kDarkButtonTextColor),
+  cardColor: kDarkNumbersButtonBackgroundColor,
   textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(primary: kDarkButtonTextColor)),
   textTheme: TextTheme(
@@ -44,15 +46,23 @@ final darkTheme = ThemeData(
     button: baseKeyboardTextStyle.copyWith(
       color: kDarkButtonTextColor,
     ),
+    caption: const TextStyle(
+      color: kDarkDisplayTextColor,
+    ),
+    headline5: const TextStyle(
+      color: Colors.white,
+    ),
   ),
 );
 
 final lightTheme = ThemeData(
   backgroundColor: Colors.white,
+  accentColor: Colors.black,
   iconTheme: const IconThemeData(color: kLightButtonTextColor),
   buttonColor: kLightNumbersButtonBackgroundColor,
   dialogBackgroundColor: kLightNumbersButtonBackgroundColor,
   scaffoldBackgroundColor: kLightNumbersButtonBackgroundColor,
+  cardColor: kLightNumbersButtonBackgroundColor,
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(primary: kLightButtonTextColor),
   ),
@@ -65,6 +75,12 @@ final lightTheme = ThemeData(
     ),
     button: baseKeyboardTextStyle.copyWith(
       color: kLightButtonTextColor,
+    ),
+    caption: const TextStyle(
+      color: kLightDisplayTextColor,
+    ),
+    headline5: const TextStyle(
+      color: Color.fromARGB(255, 37, 37, 37),
     ),
   ),
 );

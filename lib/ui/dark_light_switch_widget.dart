@@ -7,58 +7,28 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:calcunice/providers.dart';
 
 class DarkLightSwitchWidget extends HookWidget {
-  // ignore: prefer_const_constructors_in_immutables
-  DarkLightSwitchWidget({Key? key}) : super(key: key);
+  const DarkLightSwitchWidget({Key? key}) : super(key: key);
 
   static const width = 140.0;
   static const switchButtonWidth = width / 2;
   static const duration = Duration(milliseconds: 200);
-  late final AnimationController _controller;
-
-  void _handleDragUpdate(DragUpdateDetails details) {
-    _controller.value += details.primaryDelta! / switchButtonWidth;
-  }
-
-  void _handleDragEnd(DragEndDetails details) {
-    if (_controller.isAnimating ||
-        _controller.status == AnimationStatus.completed ||
-        _controller.status == AnimationStatus.dismissed) {
-      return;
-    }
-
-    final currentVelocity =
-        details.velocity.pixelsPerSecond.dx / switchButtonWidth;
-    if (_controller.value == 0 && currentVelocity == 0) {
-      return;
-    }
-
-    const flingVelocity = 2.0;
-    if (_controller.value > 0.5) {
-      _controller.fling(velocity: flingVelocity);
-    } else {
-      _controller.fling(velocity: -flingVelocity);
-    }
-    if (currentVelocity.abs() > flingVelocity.abs()) {
-      if (currentVelocity > 0) {
-        _controller.fling(velocity: flingVelocity);
-      } else {
-        _controller.fling(velocity: -flingVelocity);
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final _isLight = useProvider(isLightProvider).state;
-    _controller = _getAnimationController(context);
+    final controller = _getAnimationController(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: GestureDetector(
         onTap: () {
-          _isLight ? _controller.reverse() : _controller.forward();
+          _isLight ? controller.reverse() : controller.forward();
         },
-        onHorizontalDragUpdate: _handleDragUpdate,
-        onHorizontalDragEnd: _handleDragEnd,
+        onHorizontalDragUpdate: (details) {
+          _handleDragUpdate(details, controller);
+        },
+        onHorizontalDragEnd: (details) {
+          _handleDragEnd(details, controller);
+        },
         child: Container(
           width: width,
           decoration: BoxDecoration(
@@ -69,7 +39,7 @@ class DarkLightSwitchWidget extends HookWidget {
             alignment: Alignment.center,
             children: [
               AnimatedSwitch(
-                animation: _controller,
+                animation: controller,
                 width: switchButtonWidth,
               ),
               Positioned(
@@ -99,16 +69,59 @@ class DarkLightSwitchWidget extends HookWidget {
     );
   }
 
-  AnimationController _getAnimationController(BuildContext context) =>
-      useAnimationController(duration: duration, initialValue: 1)
-        ..addStatusListener((status) {
-          if (_controller.value == 0) {
-            updateLightState(context, isLight: false);
-          }
-          if (_controller.value == 1) {
-            updateLightState(context, isLight: true);
-          }
-        });
+  void _handleDragUpdate(
+      DragUpdateDetails details, AnimationController controller) {
+    controller.value += details.primaryDelta! / switchButtonWidth;
+  }
+
+  void _updateStatueListener(
+      BuildContext context, AnimationController controller) {
+    if (controller.value == 0) {
+      updateLightState(context, isLight: false);
+    }
+    if (controller.value == 1) {
+      updateLightState(context, isLight: true);
+    }
+  }
+
+  void _handleDragEnd(DragEndDetails details, AnimationController controller) {
+    if (controller.isAnimating ||
+        controller.status == AnimationStatus.completed ||
+        controller.status == AnimationStatus.dismissed) {
+      return;
+    }
+
+    final currentVelocity =
+        details.velocity.pixelsPerSecond.dx / switchButtonWidth;
+    if (controller.value == 0 && currentVelocity == 0) {
+      return;
+    }
+
+    const flingVelocity = 2.0;
+    if (controller.value > 0.5) {
+      controller.fling(velocity: flingVelocity);
+    } else {
+      controller.fling(velocity: -flingVelocity);
+    }
+    if (currentVelocity.abs() > flingVelocity.abs()) {
+      if (currentVelocity > 0) {
+        controller.fling(velocity: flingVelocity);
+      } else {
+        controller.fling(velocity: -flingVelocity);
+      }
+    }
+  }
+
+  AnimationController _getAnimationController(BuildContext context) {
+    final controller =
+        useAnimationController(duration: duration, initialValue: 1);
+
+    controller.addStatusListener((_) {
+      _updateStatueListener(context, controller);
+    });
+
+    return controller;
+  }
 
   void updateLightState(BuildContext context, {required bool isLight}) {
     context.read(isLightProvider).state = isLight;
